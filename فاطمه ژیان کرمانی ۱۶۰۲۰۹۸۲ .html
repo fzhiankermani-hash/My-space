@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>ماجراجویی علمی - زنجیره غذایی | فاطمه ژیان کرمانی</title>
+    <style>
+        @font-face { font-family: 'Vazirmatn'; src: local('Vazirmatn'); font-display: swap; }
+        :root {
+            --eco-bg: linear-gradient(135deg, #e8f5e9, #e3f2fd);
+            --eco-color: #6c5ce7;
+            --eco-accent: #86efac;
+            --glass-bg: rgba(255,255,255,0.75);
+            --glass-border: rgba(255,255,255,0.5);
+            --glass-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            --card-radius: 24px;
+            --font-base: 16px;
+            --font-lg: 18px;
+        }
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Vazirmatn','Tahoma',sans-serif}
+        body{
+            background:var(--eco-bg);min-height:100vh;display:flex;justify-content:center;align-items:center;
+            padding:10px;position:relative;overflow-x:hidden;font-size:var(--font-base);
+            -webkit-tap-highlight-color:transparent;user-select:none;touch-action:manipulation;
+        }
+        body.focus-mode .floating-particles,
+        body.focus-mode .bg-wave,
+        body.focus-mode .weather-container,
+        body.focus-mode .welcome-stars,
+        body.focus-mode .particle{display:none!important}
+        body.focus-mode .professor-popup{display:none!important}
+        body.focus-mode .toast-container{display:none!important}
+        body.focus-mode .xp-bar-container{opacity:.5}
+
+        .welcome-overlay{
+            position:fixed;inset:0;z-index:10000;
+            background:radial-gradient(ellipse at center, #1a1a2e 0%, #0f0f1a 50%, #000 100%);
+            display:flex;align-items:center;justify-content:center;flex-direction:column;
+        }
+        .welcome-overlay.hide{animation:wOut .8s ease forwards}
+        @keyframes wOut{to{opacity:0;transform:scale(1.1);pointer-events:none}}
+        .welcome-stars{position:absolute;inset:0;overflow:hidden}
+        .w-star{position:absolute;background:#fff;border-radius:50%;animation:twinkle var(--d) ease-in-out infinite;animation-delay:var(--delay)}
+        @keyframes twinkle{0%,100%{opacity:.2;transform:scale(1)}50%{opacity:1;transform:scale(2.5)}}
+        .w-content{text-align:center;z-index:2;padding:30px}
+        .w-content .w-icon{font-size:80px;animation:wBounce 1.5s ease-in-out infinite;display:block}
+        @keyframes wBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-25px)}}
+        .w-content h1{font-size:3em;font-weight:900;background:linear-gradient(135deg,#fbbf24,#f59e0b,#10b981,#6c5ce7);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradShift 4s ease infinite;margin:20px 0}
+        @keyframes gradShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+        .w-content .w-sub{font-size:1.3em;color:#94a3b8;margin-bottom:8px}
+        .w-content .w-tag{font-size:1em;color:#64748b;margin-bottom:30px}
+        .w-content .w-animals{display:flex;gap:20px;justify-content:center;margin-bottom:25px;flex-wrap:wrap}
+        .w-content .w-animals span{font-size:50px;animation:wFloat 2.5s ease-in-out infinite}
+        .w-content .w-animals span:nth-child(1){animation-delay:0s}
+        .w-content .w-animals span:nth-child(2){animation-delay:.3s}
+        .w-content .w-animals span:nth-child(3){animation-delay:.6s}
+        .w-content .w-animals span:nth-child(4){animation-delay:.9s}
+        .w-content .w-animals span:nth-child(5){animation-delay:1.2s}
+        .w-content .w-animals span:nth-child(6){animation-delay:1.5s}
+        @keyframes wFloat{0%,100%{transform:translateY(0) rotate(0deg)}30%{transform:translateY(-20px) rotate(-10deg)}60%{transform:translateY(-5px) rotate(10deg)}}
+        .w-start-btn{
+            background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;font-size:24px;font-weight:900;
+            padding:20px 65px;border:none;border-radius:60px;cursor:pointer;
+            box-shadow:0 10px 45px rgba(245,158,11,.6);animation:btnGlow 2s ease-in-out infinite;
+            transition:all .3s;
+        }
+        @keyframes btnGlow{0%,100%{box-shadow:0 10px 45px rgba(245,158,11,.6)}50%{box-shadow:0 25px 70px rgba(245,158,11,.9)}}
+        .w-start-btn:hover{transform:translateY(-6px) scale(1.04)}
+        .w-start-btn:active{transform:scale(.95)}
+        .designer-tag{position:absolute;bottom:25px;color:rgba(255,255,255,.5);font-size:14px;z-index:2}
+
+        .rules-overlay{
+            position:fixed;inset:0;z-index:9999;
+            background:radial-gradient(ellipse at center, #0c4a6e 0%, #082f49 50%, #042f2e 100%);
+            display:none;align-items:center;justify-content:center;flex-direction:column;
+            animation:fadeIn .6s ease;
+        }
+        .rules-overlay.hide{animation:rulesOut .7s ease forwards}
+        @keyframes rulesOut{to{opacity:0;transform:scale(1.05);pointer-events:none}}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        .rules-card{
+            background:rgba(255,255,255,.08);backdrop-filter:blur(30px);
+            border:2px solid rgba(16,185,129,.4);border-radius:28px;
+            padding:35px 30px;max-width:700px;width:90%;
+            color:#fff;text-align:right;line-height:2.2;
+            box-shadow:0 30px 80px rgba(0,0,0,.4),0 0 60px rgba(16,185,129,.15);
+            max-height:85vh;overflow-y:auto;
+        }
+        .rules-card h2{
+            text-align:center;font-size:2em;margin-bottom:20px;
+            background:linear-gradient(135deg,#10b981,#34d399,#6c5ce7);
+            -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+            background-clip:text;font-weight:900;
+        }
+        .rules-card .rule-item{
+            display:flex;align-items:flex-start;gap:12px;margin:14px 0;
+            padding:14px 18px;background:rgba(255,255,255,.04);
+            border-radius:16px;border:1px solid rgba(255,255,255,.08);
+            transition:all .3s;
+        }
+        .rules-card .rule-item:hover{background:rgba(255,255,255,.08);transform:translateX(-5px)}
+        .rules-card .rule-icon{font-size:35px;min-width:45px;text-align:center}
+        .rules-card .rule-text strong{color:#10b981}
+        .rules-card .rule-text .highlight{color:#fbbf24;font-weight:700}
+        .rules-badge-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:15px 0}
+        .rules-badge{
+            background:rgba(245,158,11,.2);border:1.5px solid rgba(245,158,11,.4);
+            padding:8px 18px;border-radius:50px;font-size:14px;font-weight:700;color:#fbbf24;
+        }
+        .rules-start-btn{
+            display:block;margin:25px auto 0;
+            background:linear-gradient(135deg,#10b981,#059669);color:#fff;font-size:20px;font-weight:900;
+            padding:16px 50px;border:none;border-radius:50px;cursor:pointer;
+            box-shadow:0 10px 40px rgba(16,185,129,.5);transition:all .3s;
+        }
+        .rules-start-btn:hover{transform:translateY(-4px);box-shadow:0 18px 50px rgba(16,185,129,.7)}
+
+        .weather-container{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+        .rain-drop{position:absolute;background:linear-gradient(transparent,rgba(100,180,255,.6));width:2px;height:20px;animation:rainFall linear infinite;border-radius:0 0 5px 5px}
+        @keyframes rainFall{0%{transform:translateY(-10vh);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(110vh);opacity:0}}
+        .bubble{position:absolute;background:rgba(255,255,255,.3);border-radius:50%;animation:bubbleRise linear infinite;border:1px solid rgba(255,255,255,.2)}
+        @keyframes bubbleRise{0%{transform:translateY(110vh) scale(0);opacity:0}10%{opacity:.6}90%{opacity:.6}100%{transform:translateY(-10vh) scale(1.3);opacity:0}}
+        .snow-flake{position:absolute;background:#fff;border-radius:50%;animation:snowFall linear infinite;opacity:.8}
+        @keyframes snowFall{0%{transform:translateY(-10vh) rotate(0deg)}100%{transform:translateY(110vh) rotate(360deg)}}
+        .dust-particle{position:absolute;background:rgba(210,180,140,.4);border-radius:50%;animation:dustFloat linear infinite}
+        @keyframes dustFloat{0%{transform:translate(0,110vh) scale(0)}10%{opacity:.5}90%{opacity:.5}100%{transform:translate(80px,-10vh) scale(1.5);opacity:0}}
+
+        .energy-arrow{
+            position:fixed;pointer-events:none;z-index:9998;
+            font-size:22px;animation:energyFlow .8s ease-out forwards;
+        }
+        @keyframes energyFlow{
+            0%{opacity:1;transform:scale(.3)}
+            50%{opacity:1;transform:scale(1.5)}
+            100%{opacity:0;transform:scale(.8) translateX(40px)}
+        }
+
+        .badge-popup{
+            position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);
+            z-index:10001;text-align:center;
+            background:linear-gradient(145deg,#1e293b,#0f172a);
+            border:3px solid #fbbf24;border-radius:24px;
+            padding:30px;color:#fff;
+            box-shadow:0 0 80px rgba(245,158,11,.6);
+            animation:badgePop .6s cubic-bezier(.175,.885,.32,1.275) forwards;
+        }
+        @keyframes badgePop{
+            0%{transform:translate(-50%,-50%) scale(0) rotate(-180deg)}
+            60%{transform:translate(-50%,-50%) scale(1.15) rotate(10deg)}
+            100%{transform:translate(-50%,-50%) scale(1) rotate(0deg)}
+        }
+        .badge-popup .badge-icon{font-size:90px;display:block;animation:badgeBounce .5s ease-in-out infinite alternate}
+        @keyframes badgeBounce{from{transform:translateY(0)}to{transform:translateY(-15px)}}
+        .badge-popup h3{font-size:1.5em;margin:10px 0;color:#fbbf24}
+        .badge-popup p{color:#94a3b8;margin-bottom:15px}
+
+        .xp-bar-container{
+            position:fixed;top:80px;left:50%;transform:translateX(-50%);
+            z-index:998;display:none;align-items:center;gap:8px;
+            background:rgba(30,41,59,.9);backdrop-filter:blur(10px);
+            padding:8px 20px;border-radius:50px;border:1.5px solid rgba(245,158,11,.4);
+            box-shadow:0 8px 30px rgba(0,0,0,.3);
+        }
+        .xp-bar-container .xp-label{color:#fbbf24;font-weight:900;font-size:13px;white-space:nowrap}
+        .xp-bar-outer{width:140px;height:10px;background:rgba(255,255,255,.1);border-radius:10px;overflow:hidden}
+        .xp-bar-inner{height:100%;background:linear-gradient(90deg,#f59e0b,#fbbf24,#10b981);border-radius:10px;transition:width .5s ease}
+        .xp-bar-container .xp-level{color:#10b981;font-weight:900;font-size:13px}
+
+        .professor-popup{
+            position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
+            z-index:9999;display:flex;align-items:center;gap:12px;
+            background:rgba(30,41,59,.95);backdrop-filter:blur(20px);
+            border:2px solid rgba(108,92,231,.5);border-radius:20px;
+            padding:14px 22px;color:#fff;max-width:500px;
+            box-shadow:0 15px 50px rgba(0,0,0,.4);
+            animation:profSlide .5s cubic-bezier(.175,.885,.32,1.275);
+        }
+        @keyframes profSlide{from{transform:translate(-50%,100px);opacity:0}to{transform:translate(-50%,0);opacity:1}}
+        .professor-popup .prof-avatar{font-size:50px;animation:profBounce 1s ease-in-out infinite}
+        @keyframes profBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+        .professor-popup .prof-text{font-size:14px;line-height:1.8;color:#cbd5e1}
+
+        .floating-particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+        .particle{position:absolute;border-radius:50%;animation:floatUp linear infinite;opacity:.6}
+        @keyframes floatUp{0%{transform:translateY(110vh) scale(0);opacity:0}10%{opacity:.7}90%{opacity:.7}100%{transform:translateY(-10vh) scale(1.2);opacity:0}}
+        .bg-wave{position:fixed;bottom:0;left:0;width:200%;height:180px;pointer-events:none;z-index:0;opacity:.15;animation:waveMove 8s ease-in-out infinite}
+        @keyframes waveMove{0%,100%{transform:translateX(0)}50%{transform:translateX(-5%)}}
+
+        .toast-container{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:10000;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+        .toast{background:rgba(255,255,255,.95);backdrop-filter:blur(20px);padding:16px 24px;border-radius:20px;font-weight:700;font-size:15px;box-shadow:0 10px 40px rgba(0,0,0,.15);border:1.5px solid rgba(255,255,255,.6);animation:toastIn .4s cubic-bezier(.175,.885,.32,1.275),toastOut .4s 3s ease forwards;text-align:center;max-width:420px;display:flex;align-items:center;gap:10px}
+        .toast.success{border-color:#10b981;background:rgba(240,253,244,.95)}
+        .toast.error{border-color:#ef4444;background:rgba(254,242,242,.95)}
+        .toast.warning{border-color:#f59e0b;background:rgba(255,251,235,.95)}
+        .toast.info{border-color:#6c5ce7;background:rgba(245,243,255,.95)}
+        @keyframes toastIn{from{transform:translateY(-120px) scale(.8);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+        @keyframes toastOut{from{opacity:1}to{opacity:0;transform:scale(.9) translateY(-20px)}}
+
+        .a11y-btn{position:fixed;bottom:90px;right:20px;background:var(--glass-bg);backdrop-filter:blur(10px);border:2px solid var(--glass-border);border-radius:50%;width:50px;height:50px;font-size:24px;cursor:pointer;z-index:1000;box-shadow:var(--glass-shadow);display:flex;align-items:center;justify-content:center;font-weight:900;transition:all .3s}
+        .a11y-btn:hover{transform:scale(1.15)}
+        .a11y-btn.active{background:#1e293b;color:#fff}
+        .student-name-display{position:fixed;top:15px;right:20px;background:var(--glass-bg);backdrop-filter:blur(20px);padding:10px 22px;border-radius:50px;font-size:14px;color:#6c5ce7;box-shadow:var(--glass-shadow);z-index:999;font-weight:700;border:1.5px solid var(--glass-border);display:none}
+        .high-score-badge{position:fixed;top:15px;left:20px;background:linear-gradient(135deg,#fbbf24,#f59e0b);padding:10px 22px;border-radius:50px;font-size:14px;color:#1e293b;box-shadow:0 8px 30px rgba(245,158,11,.35);z-index:999;font-weight:900;display:flex;align-items:center;gap:8px;cursor:pointer;transition:all .3s}
+        .high-score-badge:hover{transform:scale(1.08)}
+        .designer-credit{position:fixed;bottom:15px;left:20px;background:var(--glass-bg);backdrop-filter:blur(20px);padding:10px 22px;border-radius:50px;font-size:14px;color:#475569;box-shadow:var(--glass-shadow);z-index:999;font-weight:700;border:1.5px solid var(--glass-border);cursor:pointer;transition:all .3s}
+        .designer-credit:hover{transform:translateY(-3px)}
+        .designer-credit span{color:var(--eco-color);font-weight:900}
+
+        .story-overlay{
+            position:fixed;inset:0;z-index:10002;
+            background:radial-gradient(ellipse at center, rgba(0,0,0,.92) 0%, rgba(0,0,0,.97) 100%);
+            display:flex;align-items:center;justify-content:center;flex-direction:column;
+            cursor:pointer;animation:fadeIn .8s ease;
+        }
+        .story-overlay .story-content{
+            text-align:center;color:#fff;padding:40px;max-width:700px;
+            animation:storyFloat 3s ease-in-out infinite;
+        }
+        @keyframes storyFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+        .story-overlay .story-icon{font-size:100px;display:block;margin-bottom:20px;animation:storyPulse 2s ease-in-out infinite}
+        @keyframes storyPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+        .story-overlay .story-title{font-size:2.5em;font-weight:900;background:linear-gradient(135deg,#fbbf24,#10b981);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:20px}
+        .story-overlay .story-text{font-size:1.4em;line-height:2.2;color:#e2e8f0;margin-bottom:30px;text-align:center}
+        .story-overlay .story-tap{font-size:1em;color:#94a3b8;animation:blink 1.5s ease-in-out infinite}
+        @keyframes blink{0%,100%{opacity:.4}50%{opacity:1}}
+
+        .hint-highlight{
+            animation: hintPulse .8s ease-in-out 3!important;
+            border-color: #fbbf24!important;
+            box-shadow: 0 0 30px rgba(251,191,36,.7)!important;
+            background: rgba(254,243,199,.9)!important;
+        }
+        @keyframes hintPulse{
+            0%,100%{transform:scale(1);box-shadow:0 0 20px rgba(251,191,36,.4)}
+            50%{transform:scale(1.08);box-shadow:0 0 40px rgba(251,191,36,.9)}
+        }
+
+        .game-container{max-width:1100px;width:100%;background:var(--glass-bg);backdrop-filter:blur(30px);border-radius:var(--card-radius);border:1.5px solid var(--glass-border);box-shadow:var(--glass-shadow);padding:16px;position:relative;z-index:1;transition:all .5s ease}
+        .duel-container{display:flex;gap:15px;max-width:100%;width:100%;align-items:flex-start;justify-content:center;flex-wrap:wrap}
+        .duel-player-panel{flex:1;min-width:340px;max-width:520px;background:var(--glass-bg);backdrop-filter:blur(20px);border-radius:var(--card-radius);border:2px solid var(--glass-border);box-shadow:var(--glass-shadow);padding:12px;position:relative;transition:all .4s}
+        .duel-player-panel.player1{border-color:rgba(59,130,246,.5)}
+        .duel-player-panel.player2{border-color:rgba(239,68,68,.5)}
+        .duel-player-panel.winner{border-color:#10b981!important;box-shadow:0 0 40px rgba(16,185,129,.4)!important;animation:winnerGlow 1s ease-in-out infinite}
+        @keyframes winnerGlow{0%,100%{box-shadow:0 0 30px rgba(16,185,129,.3)}50%{box-shadow:0 0 60px rgba(16,185,129,.6)}}
+        .duel-player-header{text-align:center;padding:10px;border-radius:18px;margin-bottom:10px;font-weight:900;font-size:16px;color:#fff}
+        .player1 .duel-player-header{background:linear-gradient(135deg,#3b82f6,#2563eb)}
+        .player2 .duel-player-header{background:linear-gradient(135deg,#ef4444,#dc2626)}
+        .duel-vs{display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:900;color:#6c5ce7;animation:vsPulse 1s ease-in-out infinite;min-width:60px}
+        @keyframes vsPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2);color:#f59e0b}}
+        .duel-finish-overlay{position:absolute;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(10px);border-radius:var(--card-radius);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;display:none;color:#fff;font-size:22px;font-weight:900;text-align:center}
+        .duel-winner-banner{background:linear-gradient(135deg,#fbbf24,#f59e0b,#ef4444);color:#1e293b;padding:18px 35px;border-radius:30px;font-weight:900;font-size:26px;text-align:center;box-shadow:0 20px 60px rgba(245,158,11,.6);animation:bannerBounce .8s cubic-bezier(.175,.885,.32,1.275);margin:15px 0;display:none}
+        @keyframes bannerBounce{0%{transform:scale(0) rotate(-10deg);opacity:0}60%{transform:scale(1.1) rotate(3deg)}100%{transform:scale(1) rotate(0deg);opacity:1}}
+
+        .science-modal{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(25px);z-index:9000;display:flex;align-items:center;justify-content:center;animation:fadeIn .5s ease}
+        .science-card{background:linear-gradient(155deg,#1e293b,#0f172a);border:2px solid rgba(245,158,11,.5);border-radius:28px;padding:35px 30px;max-width:580px;width:90%;text-align:center;color:#fff;box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 80px rgba(245,158,11,.25);animation:slideUp .6s cubic-bezier(.175,.885,.32,1.275)}
+        @keyframes slideUp{from{transform:translateY(80px) scale(.9);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+        .science-card .s-icon{font-size:90px;display:block;margin-bottom:10px;animation:sBounce 1.2s ease-in-out infinite}
+        @keyframes sBounce{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-18px) scale(1.08)}}
+        .science-card h2{font-size:1.7em;margin-bottom:12px;background:linear-gradient(135deg,#fbbf24,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:900}
+        .science-card .s-text{font-size:16px;color:#cbd5e1;line-height:2.3;margin:18px 0;background:rgba(255,255,255,.04);padding:18px;border-radius:16px;border:1px solid rgba(255,255,255,.08);text-align:right}
+        .science-card .s-source{font-size:11px;color:#64748b;font-style:italic}
+        .science-card .s-btn{background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;font-size:18px;font-weight:900;padding:15px 45px;border:none;border-radius:50px;cursor:pointer;margin-top:15px;box-shadow:0 8px 30px rgba(245,158,11,.4);transition:all .3s}
+        .science-card .s-btn:hover{transform:translateY(-3px);box-shadow:0 15px 45px rgba(245,158,11,.6)}
+
+        .name-entry-screen{text-align:center;padding:50px 25px;background:var(--glass-bg);backdrop-filter:blur(30px);border-radius:var(--card-radius);border:1.5px solid var(--glass-border);box-shadow:var(--glass-shadow);max-width:500px;width:100%}
+        .name-entry-screen h2{font-size:2.5em;background:linear-gradient(135deg,#6c5ce7,#10b981);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;font-weight:900}
+        .name-entry-screen input{width:100%;padding:15px 22px;border:2px solid rgba(108,92,231,.3);border-radius:50px;font-size:18px;text-align:center;outline:none;margin-bottom:18px;background:rgba(255,255,255,.8);backdrop-filter:blur(10px)}
+        .name-entry-screen input:focus{border-color:#10b981;box-shadow:0 0 0 5px rgba(16,185,129,.1)}
+        .btn-start{background:linear-gradient(135deg,#6c5ce7,#8b5cf6);color:#fff;font-size:20px;padding:15px 50px;border:none;border-radius:50px;cursor:pointer;font-weight:700;box-shadow:0 8px 30px rgba(108,92,231,.35);transition:all .3s}
+        .btn-start:hover{transform:translateY(-4px);box-shadow:0 15px 40px rgba(108,92,231,.5)}
+        .error-msg{color:#ef4444;font-size:14px;margin-top:-10px;margin-bottom:12px;display:none}
+        .prev-score{background:rgba(240,253,244,.8);backdrop-filter:blur(10px);border:1.5px solid rgba(16,185,129,.4);border-radius:18px;padding:15px;margin-bottom:18px;display:none}
+
+        .difficulty-screen{text-align:center;padding:35px 15px}
+        .difficulty-screen h2{font-size:2.5em;background:linear-gradient(135deg,#1e293b,#6c5ce7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px;font-weight:900}
+        .diff-options{display:flex;justify-content:center;gap:25px;flex-wrap:wrap}
+        .diff-card{background:var(--glass-bg);backdrop-filter:blur(15px);border:2px solid var(--glass-border);border-radius:25px;padding:35px 25px;cursor:pointer;transition:all .4s;width:200px;box-shadow:var(--glass-shadow);position:relative}
+        .diff-card:hover{transform:translateY(-10px);box-shadow:0 25px 50px rgba(108,92,231,.2)}
+        .diff-card .d-icon{font-size:60px;margin-bottom:10px;animation:bounce 2s infinite}
+        @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+        .diff-card h3{font-size:1.3em;font-weight:900}
+
+        .game-header{text-align:center;margin-bottom:12px}
+        .game-header h2{font-size:1.6em;background:linear-gradient(135deg,#1e293b,var(--eco-color));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;font-weight:900}
+        .stats-bar{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:6px 0}
+        .stat-item{background:var(--glass-bg);backdrop-filter:blur(15px);padding:8px 16px;border-radius:50px;box-shadow:var(--glass-shadow);font-weight:700;display:flex;align-items:center;gap:4px;font-size:13px;border:1.5px solid var(--glass-border);transition:all .3s}
+        .combo-display{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1e293b;animation:comboPulse .5s ease;display:none;border:none}
+        @keyframes comboPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+        .score-display{color:#6c5ce7}
+        .stage-indicator{background:var(--eco-color);color:#fff;padding:6px 16px;border-radius:50px;font-size:12px;font-weight:700}
+
+        .info-panel{background:var(--glass-bg);backdrop-filter:blur(15px);border:1.5px solid rgba(134,239,172,.5);border-radius:var(--card-radius);padding:12px;margin-bottom:14px;display:flex;justify-content:space-around;text-align:center;flex-wrap:wrap;gap:8px;box-shadow:var(--glass-shadow)}
+        .info-item{flex:1;min-width:100px;padding:6px}
+        .title.producer{color:#059669;font-weight:900}
+        .title.consumer{color:#dc2626;font-weight:900}
+        .emoji-big{font-size:36px;animation:float 3s ease-in-out infinite;display:inline-block}
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+        .chain-row{display:flex;align-items:center;justify-content:center;gap:4px;margin:14px 0;flex-wrap:wrap;padding:12px;background:var(--glass-bg);backdrop-filter:blur(15px);border-radius:var(--card-radius);min-height:100px;border:1.5px solid var(--glass-border);box-shadow:var(--glass-shadow);overflow-x:auto}
+        .slot{width:70px;height:100px;border:3px dashed rgba(148,163,184,.5);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.7);backdrop-filter:blur(10px);position:relative;transition:all .35s;cursor:pointer;box-shadow:0 4px 15px rgba(0,0,0,.04);flex-shrink:0}
+        .slot::after{content:attr(data-label);position:absolute;bottom:4px;font-weight:700;font-size:9px;color:var(--eco-color);text-align:center;width:100%;white-space:nowrap;padding:0 4px}
+        .slot:hover{border-color:var(--eco-color);transform:translateY(-3px);box-shadow:0 8px 20px rgba(108,92,231,.12)}
+        .slot.drag-over{border-color:#10b981!important;background:rgba(209,250,229,.8)!important;transform:scale(1.06)!important;box-shadow:0 0 25px rgba(16,185,129,.25)!important}
+        .slot.filled{border-style:solid;border-color:var(--eco-color);background:rgba(245,243,255,.8);box-shadow:0 6px 20px rgba(108,92,231,.08)}
+        .slot .emoji{font-size:32px;transition:transform .3s}
+        .slot .name{font-size:10px;font-weight:bold;margin-top:2px;color:#334155;text-align:center;line-height:1.2}
+        .arrow{font-size:22px;color:var(--eco-color);font-weight:bold;animation:arrowPulse 1.5s infinite;flex-shrink:0}
+        @keyframes arrowPulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}
+
+        .vault{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:10px;padding:12px;background:var(--glass-bg);backdrop-filter:blur(15px);border-radius:var(--card-radius);border:1.5px solid var(--glass-border);box-shadow:var(--glass-shadow)}
+        .organism{width:70px;height:95px;background:rgba(255,255,255,.8);backdrop-filter:blur(10px);border:2px solid rgba(203,213,225,.5);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:grab;transition:all .35s;user-select:none;box-shadow:0 4px 15px rgba(0,0,0,.04);touch-action:none;position:relative}
+        .organism:hover{border-color:var(--eco-color);transform:translateY(-4px);box-shadow:0 12px 28px rgba(108,92,231,.12)}
+        .organism.selected{border-color:var(--eco-color)!important;background:rgba(239,238,255,.9)!important;transform:scale(1.08)!important;box-shadow:0 0 25px rgba(108,92,231,.25)!important}
+        .organism.used{opacity:.3;pointer-events:none;filter:grayscale(.5)}
+        .organism .emoji{font-size:30px;pointer-events:none}
+        .organism .name{font-size:10px;font-weight:bold;margin-top:3px;pointer-events:none;text-align:center;line-height:1.2}
+
+        .actions{text-align:center;margin-top:14px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+        .btn{padding:10px 22px;border:none;border-radius:50px;font-weight:700;cursor:pointer;font-size:14px;transition:all .35s;box-shadow:0 6px 25px rgba(0,0,0,.1);display:flex;align-items:center;gap:4px}
+        .btn:active{transform:scale(.94)}
+        .btn-check{background:linear-gradient(135deg,#6c5ce7,#8b5cf6);color:#fff;box-shadow:0 8px 30px rgba(108,92,231,.35)}
+        .btn-reset{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1e293b}
+        .btn-hint{background:linear-gradient(135deg,#10b981,#34d399);color:#fff}
+        .btn-home{background:rgba(100,116,139,.8);color:#fff;font-size:12px;padding:6px 14px}
+        .btn-duel{background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;font-size:16px;padding:14px 30px}
+
+        .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;justify-content:center;align-items:center;backdrop-filter:blur(10px);animation:fadeIn .3s ease}
+        .modal-card{background:rgba(255,255,255,.95);backdrop-filter:blur(30px);padding:35px;border-radius:25px;text-align:center;max-width:550px;width:90%;border:2px solid rgba(251,191,36,.5);box-shadow:0 30px 70px rgba(0,0,0,.2);animation:slideUp .5s cubic-bezier(.175,.885,.32,1.275);max-height:85vh;overflow-y:auto}
+
+        .touch-clone{position:fixed;pointer-events:none;z-index:9999;opacity:.9;transform:translate(-50%,-50%) scale(1.15);width:70px;height:90px;background:rgba(255,255,255,.95);backdrop-filter:blur(15px);border:3px solid #6c5ce7;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 20px 50px rgba(108,92,231,.5)}
+        .touch-clone .emoji{font-size:30px}
+        .touch-clone .name{font-size:11px;font-weight:bold}
+
+        .narration-overlay{position:fixed;top:0;left:0;right:0;z-index:5000;background:rgba(0,0,0,.85);backdrop-filter:blur(15px);color:#fff;padding:20px 25px;text-align:center;font-size:18px;font-weight:700;line-height:2;animation:slideDownNarr .6s cubic-bezier(.175,.885,.32,1.275);pointer-events:none}
+        @keyframes slideDownNarr{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:1}}
+        .narration-overlay.hide{animation:slideUpNarr .6s ease forwards}
+        @keyframes slideUpNarr{to{transform:translateY(-100%);opacity:0}}
+
+        @keyframes floatScore{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-60px) scale(1.5)}}
+        @keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(105vh) rotate(720deg)}}
+        @keyframes starExplode{0%{opacity:1;transform:scale(0) rotate(0deg)}50%{opacity:1;transform:scale(1.4) rotate(180deg)}100%{opacity:0;transform:scale(.3) rotate(360deg) translateY(-120px)}}
+
+        @media(max-width:768px){
+            .slot{width:58px;height:85px}.slot .emoji{font-size:26px}.slot .name{font-size:8px}
+            .organism{width:58px;height:80px}.organism .emoji{font-size:24px}.organism .name{font-size:8px}
+            .duel-container{flex-direction:column}.duel-vs{min-width:auto;font-size:28px}
+            .w-content h1{font-size:1.8em}.w-start-btn{font-size:16px;padding:14px 40px}
+            .rules-card{padding:18px 12px}.story-overlay .story-title{font-size:1.8em}.story-overlay .story-text{font-size:1.1em}
+            .chain-row{gap:2px;padding:8px}.arrow{font-size:16px}
+        }
+    </style>
+</head>
+<body>
+
+<div class="welcome-overlay" id="welcome-overlay">
+    <div class="welcome-stars" id="welcome-stars"></div>
+    <div class="w-content">
+        <span class="w-icon" aria-hidden="true">🌍</span>
+        <h1>آماده‌ای برای یک ماجراجویی علمی؟</h1>
+        <p class="w-sub">سفری به دنیای شگفت‌انگیز زنجیره‌های غذایی</p>
+        <div class="w-animals" aria-hidden="true">
+            <span>🌱</span><span>🐛</span><span>🐦</span><span>🦊</span><span>🦅</span><span>🦁</span>
+        </div>
+        <p class="w-tag">۱۲ اکوسیستم شگفت‌انگیز منتظر توست! 🔬</p>
+        <button class="w-start-btn" onclick="closeWelcome()" aria-label="شروع ماجراجویی">🚀 بزن بریم!</button>
+    </div>
+    <div class="designer-tag">✨ طراحی: فاطمه ژیان کرمانی</div>
+</div>
+
+<div class="rules-overlay" id="rules-overlay">
+    <div class="welcome-stars" id="rules-stars"></div>
+    <div class="rules-card">
+        <h2>📖 قوانین ماجراجویی</h2>
+        <div class="rule-item">
+            <span class="rule-icon" aria-hidden="true">🎯</span>
+            <div class="rule-text"><strong>هدف:</strong> موجودات رو در جایگاه <strong>درست</strong> زنجیره غذایی قرار بده. از <span class="highlight">تولیدکننده</span> (گیاه) شروع کن و تا <span class="highlight">شکارچی رأس</span> ادامه بده!</div>
+        </div>
+        <div class="rule-item">
+            <span class="rule-icon" aria-hidden="true">🖱️</span>
+            <div class="rule-text"><strong>روش بازی:</strong> موجودات رو با موس یا انگشت <strong>بکش</strong> و در جایگاه خالی <strong>رها کن</strong>. یا روش کلیک کن، بعد روی جایگاه کلیک کن.</div>
+        </div>
+        <div class="rule-item">
+            <span class="rule-icon" aria-hidden="true">⚠️</span>
+            <div class="rule-text"><strong>نکته طلایی:</strong> <span class="highlight">تولیدکننده همیشه در اولین جایگاه</span> قرار می‌گیره! (گیاهان، جلبک‌ها، فیتوپلانکتون‌ها)</div>
+        </div>
+        <div class="rule-item">
+            <span class="rule-icon" aria-hidden="true">🏆</span>
+            <div class="rule-text"><strong>امتیازدهی:</strong> پاسخ صحیح + زمان باقی‌مونده + <span class="highlight">زنجیره (پشت سر هم)</span>. هرچه زنجیره طولانی‌تر باشه، امتیاز بیشتر!</div>
+        </div>
+        <div class="rule-item">
+            <span class="rule-icon" aria-hidden="true">👥</span>
+            <div class="rule-text"><strong>حالت دوئل:</strong> دو بازیکن همزمان مسابقه می‌دن. هرکی زودتر تموم کنه و امتیاز بیشتری بگیره، برنده‌ست!</div>
+        </div>
+        <div class="rules-badge-row">
+            <span class="rules-badge">🌍 ۱۲ اکوسیستم</span>
+            <span class="rules-badge">🔄 چرخه‌های کامل</span>
+            <span class="rules-badge">🏅 ۸ مدال</span>
+            <span class="rules-badge">👨‍🔬 پروفسور راهنما</span>
+        </div>
+        <button class="rules-start-btn" onclick="closeRules()" aria-label="شروع بازی">🚀 فهمیدم، شروع کن!</button>
+    </div>
+</div>
+
+<div class="weather-container" id="weather-container"></div>
+<div class="xp-bar-container" id="xp-bar-container">
+    <span class="xp-label" aria-hidden="true">⭐</span>
+    <span class="xp-label" id="xp-level-name">آماتور</span>
+    <div class="xp-bar-outer"><div class="xp-bar-inner" id="xp-bar-inner" style="width:0%"></div></div>
+    <span class="xp-level" id="xp-level-num">Lv.1</span>
+</div>
+
+<div class="floating-particles" id="floating-particles"></div>
+<svg class="bg-wave" id="bg-wave" viewBox="0 0 1440 180" preserveAspectRatio="none"><path fill="var(--eco-color)" fill-opacity="0.12" d="M0,120 C240,160 480,40 720,80 C960,120 1200,30 1440,90 L1440,180 L0,180 Z"/></svg>
+<div class="toast-container" id="toast-container"></div>
+<button class="a11y-btn" id="a11y-btn" onclick="toggleA11y()" title="دسترسی‌پذیری" aria-label="تنظیمات دسترسی‌پذیری">♿</button>
+<div class="student-name-display" id="student-name-display">👤 <span id="student-name-value"></span></div>
+<div class="high-score-badge" id="high-score-badge" style="display:none" onclick="showLeaderboard()" aria-label="مشاهده بهترین نمرات">🏆 بهترین: <span id="high-score-value">0</span></div>
+<div class="designer-credit" id="designer-credit">✨ طراحی: <span>فاطمه ژیان کرمانی</span></div>
+
+<div class="name-entry-screen" id="name-entry-screen" style="display:none">
+    <h2>🌿 سلام کاوشگر!</h2>
+    <p>اسمت رو وارد کن تا ماجراجویی شروع بشه:</p>
+    <div class="prev-score" id="prev-score-display"><div class="score-title">🏆 بهترین نمره قبلی:</div><div class="score-value" id="prev-score-value">۰</div><div class="score-hint">می‌تونی رکوردت رو بشکنی! 🚀</div></div>
+    <input type="text" id="student-name-input" placeholder="اسمت رو اینجا بنویس..." maxlength="20" autocomplete="off" aria-label="نام بازیکن">
+    <p class="error-msg" id="name-error">⚠️ لطفاً اسمت رو وارد کن!</p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button class="btn-start" onclick="submitName()" aria-label="شروع بازی">🚀 شروع ماجراجویی</button>
+        <button class="btn btn-duel" onclick="showDuelSetup()" aria-label="مسابقه دو نفره">👥 مسابقه دو نفره</button>
+    </div>
+</div>
+
+<div class="game-container" id="difficulty-screen" style="display:none">
+    <div class="difficulty-screen">
+        <h2>🌿 بازی زنجیره غذایی</h2>
+        <p style="color:#6c5ce7;font-weight:700;font-size:17px">👤 <span id="welcome-name"></span> عزیز، خوش اومدی!</p>
+        <p style="color:#64748b">بهترین نمره: <b id="current-best-score">--</b></p>
+        <p style="margin-top:12px">پیش از شروع، یه سوال ساده:</p>
+        <div id="pre-assessment" style="margin-bottom:25px">
+            <p style="font-size:17px;font-weight:700">کدوم <span style="color:#059669">تولیدکننده</span> است؟</p>
+            <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:12px">
+                <button class="btn btn-check" onclick="preAssess('correct')" style="background:#10b981" aria-label="گیاه - پاسخ صحیح">🌱 گیاه</button>
+                <button class="btn btn-check" onclick="preAssess('wrong')" style="background:#ef4444" aria-label="خرگوش - پاسخ نادرست">🐰 خرگوش</button>
+                <button class="btn btn-check" onclick="preAssess('wrong')" style="background:#f59e0b" aria-label="روباه - پاسخ نادرست">🦊 روباه</button>
+            </div>
+            <p id="pre-result" style="margin-top:10px;font-weight:700"></p>
+        </div>
+        <p>حالا سطح دشواری رو انتخاب کن:</p>
+        <div class="diff-options">
+            <div class="diff-card easy" onclick="startGame('easy')" role="button" tabindex="0" aria-label="سطح ساده"><div class="d-icon">🌱</div><h3>ساده</h3><p>بدون محدودیت زمان</p></div>
+            <div class="diff-card normal" onclick="startGame('normal')" role="button" tabindex="0" aria-label="سطح معمولی"><div class="d-icon">⚡</div><h3>معمولی</h3><p>زمان استاندارد</p></div>
+            <div class="diff-card hard" onclick="startGame('hard')" role="button" tabindex="0" aria-label="سطح حرفه‌ای"><div class="d-icon">🔥</div><h3>حرفه‌ای</h3><p>زمان سریع</p></div>
+        </div>
+    </div>
+</div>
+
+<div class="game-container" id="game-screen" style="display:none">
+    <div class="game-header">
+        <h2 id="game-title">🌿 زنجیره غذایی</h2>
+        <div class="stats-bar">
+            <div class="stat-item stage-indicator" id="stage-text">مرحله ۱ از ۱۲</div>
+            <div class="stat-item score-display">⭐ امتیاز: <span id="score-value">0</span></div>
+            <div class="stat-item combo-display" id="combo-display">🔥 زنجیره ×<span id="combo-value">1</span></div>
+            <div class="stat-item timer-display" id="timer-container">⏱ <span id="timer-value">--</span></div>
+        </div>
+    </div>
+    <div class="info-panel">
+        <div class="info-item"><span class="emoji-big">🌱</span><div class="title producer">تولیدکننده</div></div>
+        <div class="info-item"><span style="font-size:30px">⚡</span><div style="font-weight:700;color:#6c5ce7">جریان انرژی ⬅️</div></div>
+        <div class="info-item"><span class="emoji-big">🐰</span><div class="title consumer">مصرف‌کننده</div></div>
+    </div>
+    <div class="chain-row" id="drop-zone"></div>
+    <div class="vault" id="items-vault"></div>
+    <div class="actions">
+        <button class="btn btn-check" onclick="checkAnswer()" aria-label="بررسی پاسخ">✅ بررسی کن</button>
+        <button class="btn btn-hint" onclick="useHint()" aria-label="راهنمایی">💡 راهنمایی</button>
+        <button class="btn btn-reset" onclick="resetStage()" aria-label="پاک کردن">🔄 پاک کردن</button>
+        <button class="btn btn-home" onclick="goHome()" aria-label="بازگشت به خانه">🏠 بازگشت</button>
+    </div>
+</div>
+
+<div class="game-container" id="duel-screen" style="display:none">
+    <div style="text-align:center;margin-bottom:12px">
+        <h2 style="font-size:1.6em;background:linear-gradient(135deg,#f59e0b,#ef4444);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:900">⚔️ مسابقه دو نفره ⚔️</h2>
+        <div class="duel-winner-banner" id="duel-winner-banner"></div>
+    </div>
+    <div class="duel-container">
+        <div class="duel-player-panel player1" id="duel-player1-panel">
+            <div class="duel-player-header" id="duel-player1-header">🔵 بازیکن ۱</div>
+            <div class="stats-bar" style="flex-wrap:wrap;justify-content:center">
+                <div class="stat-item">📊 <span id="duel-p1-stage">۱/۱۲</span></div>
+                <div class="stat-item score-display">⭐ <span id="duel-p1-score">0</span></div>
+                <div class="stat-item timer-display" id="duel-p1-timer-container">⏱ <span id="duel-p1-timer">--</span></div>
+            </div>
+            <div class="chain-row" id="duel-p1-drop-zone"></div>
+            <div class="vault" id="duel-p1-items-vault"></div>
+            <div class="actions" style="gap:4px">
+                <button class="btn btn-check" onclick="duelCheck(1)" style="padding:6px 12px;font-size:12px" aria-label="بررسی بازیکن ۱">✅</button>
+                <button class="btn btn-hint" onclick="duelHint(1)" style="padding:6px 12px;font-size:12px" aria-label="راهنمایی بازیکن ۱">💡</button>
+                <button class="btn btn-reset" onclick="duelReset(1)" style="padding:6px 12px;font-size:12px" aria-label="پاک کردن بازیکن ۱">🔄</button>
+            </div>
+            <div class="duel-finish-overlay" id="duel-p1-finished"><span>✅ تموم شد!<br>⏱ <span id="duel-p1-finish-time">--</span> ثانیه<br>⭐ <span id="duel-p1-finish-score">0</span></span></div>
+        </div>
+        <div class="duel-vs" aria-hidden="true">VS</div>
+        <div class="duel-player-panel player2" id="duel-player2-panel">
+            <div class="duel-player-header" id="duel-player2-header">🔴 بازیکن ۲</div>
+            <div class="stats-bar" style="flex-wrap:wrap;justify-content:center">
+                <div class="stat-item">📊 <span id="duel-p2-stage">۱/۱۲</span></div>
+                <div class="stat-item score-display">⭐ <span id="duel-p2-score">0</span></div>
+                <div class="stat-item timer-display" id="duel-p2-timer-container">⏱ <span id="duel-p2-timer">--</span></div>
+            </div>
+            <div class="chain-row" id="duel-p2-drop-zone"></div>
+            <div class="vault" id="duel-p2-items-vault"></div>
+            <div class="actions" style="gap:4px">
+                <button class="btn btn-check" onclick="duelCheck(2)" style="padding:6px 12px;font-size:12px" aria-label="بررسی بازیکن ۲">✅</button>
+                <button class="btn btn-hint" onclick="duelHint(2)" style="padding:6px 12px;font-size:12px" aria-label="راهنمایی بازیکن ۲">💡</button>
+                <button class="btn btn-reset" onclick="duelReset(2)" style="padding:6px 12px;font-size:12px" aria-label="پاک کردن بازیکن ۲">🔄</button>
+            </div>
+            <div class="duel-finish-overlay" id="duel-p2-finished"><span>✅ تموم شد!<br>⏱ <span id="duel-p2-finish-time">--</span> ثانیه<br>⭐ <span id="duel-p2-finish-score">0</span></span></div>
+        </div>
+    </div>
+    <div style="text-align:center;margin-top:12px"><button class="btn btn-home" onclick="endDuel()" aria-label="پایان دوئل">🏠 پایان</button></div>
+</div>
+
+<div class="modal" id="finish-modal"><div class="modal-card"><h1 style="font-size:2em">🎉 آفرین کاوشگر!</h1><p id="final-message" style="margin:15px 0;font-size:17px"></p><div id="score-comparison" style="margin:12px 0;padding:15px;background:rgba(248,250,252,.8);border-radius:15px;display:none"></div><button class="btn btn-check" onclick="goHome()" aria-label="شروع دوباره">🔄 ماجراجویی دوباره</button></div></div>
+<div class="modal" id="duel-setup-modal"><div class="modal-card" style="border-color:rgba(245,158,11,.5);max-width:600px"><h1 style="font-size:1.8em">👥 مسابقه دو نفره</h1><p style="color:#64748b;margin:10px 0">اسم دو بازیکن رو وارد کن:</p><div style="display:flex;gap:15px;flex-wrap:wrap;justify-content:center"><div style="flex:1;min-width:180px"><p style="color:#3b82f6;font-weight:700">🔵 بازیکن ۱</p><input type="text" id="duel-p1-name" placeholder="اسم..." maxlength="15" style="width:100%;padding:12px;border-radius:50px;border:2px solid rgba(59,130,246,.4);text-align:center" aria-label="نام بازیکن اول"></div><div style="flex:1;min-width:180px"><p style="color:#ef4444;font-weight:700">🔴 بازیکن ۲</p><input type="text" id="duel-p2-name" placeholder="اسم..." maxlength="15" style="width:100%;padding:12px;border-radius:50px;border:2px solid rgba(239,68,68,.4);text-align:center" aria-label="نام بازیکن دوم"></div></div><p style="color:#64748b;margin:12px 0">سطح دشواری:</p><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="btn btn-check" style="background:#10b981" onclick="startDuel('easy')" aria-label="دوئل ساده">🌱 ساده</button><button class="btn btn-check" style="background:#f59e0b" onclick="startDuel('normal')" aria-label="دوئل معمولی">⚡ معمولی</button><button class="btn btn-check" style="background:#ef4444" onclick="startDuel('hard')" aria-label="دوئل حرفه‌ای">🔥 حرفه‌ای</button></div><p class="error-msg" id="duel-error" style="color:#ef4444;margin-top:8px">⚠️ اسم هر دو بازیکن رو وارد کن!</p><button class="btn btn-home" onclick="document.getElementById('duel-setup-modal').style.display='none'" style="margin-top:12px" aria-label="انصراف">انصراف</button></div></div>
+<script>
+console.log('Game loading... v3 - Optimized');
+
+var AudioSystem = {
+    context: null,
+    initialized: false,
+    musicGain: null,
+    oscillators: [],
+    currentMusic: null,
+    noiseNodes: [],
+    init: function() {
+        if (this.initialized) return;
+        try {
+            this.context = new (window.AudioContext || window.webkitAudioContext)();
+            this.musicGain = this.context.createGain();
+            this.musicGain.gain.value = 0.25;
+            this.musicGain.connect(this.context.destination);
+            this.initialized = true;
+            console.log('Audio ok');
+        } catch(e) {
+            console.log('Audio init error:', e);
+        }
+    },
+    resume: function() {
+        if (this.context && this.context.state === 'suspended') {
+            this.context.resume();
+        }
+    },
+    play: function(f, t, d, v, dest) {
+        if (!this.context) return;
+        this.resume();
+        v = v || 0.35;
+        dest = dest || this.context.destination;
+        try {
+            var o = this.context.createOscillator();
+            var g = this.context.createGain();
+            o.connect(g);
+            g.connect(dest);
+            o.frequency.value = f;
+            o.type = t;
+            g.gain.setValueAtTime(v, this.context.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + d);
+            o.start();
+            o.stop(this.context.currentTime + d);
+        } catch(e) {}
+    },
+    stopNoise: function() {
+        var self = this;
+        this.noiseNodes.forEach(function(n) { try { n.stop(); } catch(e) {} });
+        this.noiseNodes = [];
+    },
+    playAmbient: function(type, vol) {
+        this.stopNoise();
+        if (!this.context || !this.musicGain) return;
+        this.resume();
+        vol = vol || 1;
+        var bs = 2 * this.context.sampleRate;
+        var nb = this.context.createBuffer(1, bs, this.context.sampleRate);
+        var out = nb.getChannelData(0);
+        for (var i = 0; i < bs; i++) out[i] = Math.random() * 2 - 1;
+        var ns = this.context.createBufferSource();
+        ns.buffer = nb;
+        ns.loop = true;
+        var fl = this.context.createBiquadFilter();
+        var ng = this.context.createGain();
+        var cfg = {forest:[800,.5,.04],ocean:[400,0,.05],desert:[1000,0,.03],mountain:[600,.3,.04],rainforest:[700,.6,.04],savanna:[500,.4,.04],lake:[350,0,.05],wetland:[450,.3,.04],grassland:[550,.4,.04],polar:[300,0,.03],farm:[600,.4,.04],woodland:[650,.5,.04]};
+        var c = cfg[type] || cfg.forest;
+        fl.type = c[1] ? 'bandpass' : 'lowpass';
+        fl.frequency.value = c[0];
+        if (c[1]) fl.Q.value = c[1];
+        ng.gain.value = c[2] * vol;
+        ns.connect(fl);
+        fl.connect(ng);
+        ng.connect(this.musicGain);
+        ns.start();
+        this.noiseNodes.push(ns);
+    },
+    stopMusic: function() {
+        this.oscillators.forEach(function(o) { try { o.stop(); } catch(e) {} });
+        this.oscillators = [];
+        this.currentMusic = null;
+        this.stopNoise();
+    },
+    playMusic: function(type, vol) {
+        this.stopMusic();
+        if (!this.context || !this.musicGain) return;
+        this.resume();
+        vol = vol || 1;
+        this.playAmbient(type, vol);
+        var pat = {forest:{n:[262,330,392,330,294,330,262,294],t:1.5,w:'sine',v:.1},ocean:{n:[196,262,330,262,294,330,392,330],t:2.2,w:'sine',v:.08},desert:{n:[294,330,349,392,349,330,294,262],t:1.8,w:'triangle',v:.07},farm:{n:[330,392,440,392,330,294,330,392],t:1.3,w:'sine',v:.1},mountain:{n:[392,440,494,440,392,349,330,294],t:2,w:'triangle',v:.08},wetland:{n:[262,294,330,349,330,294,262,294],t:1.6,w:'sine',v:.09},grassland:{n:[349,392,440,392,349,330,294,330],t:1.4,w:'sine',v:.1},rainforest:{n:[440,494,523,494,440,392,440,494],t:1.7,w:'triangle',v:.08},polar:{n:[330,294,262,294,330,349,330,294],t:2.5,w:'sine',v:.07},savanna:{n:[294,349,440,349,330,294,262,330],t:1.6,w:'triangle',v:.09},lake:{n:[262,294,330,349,392,349,330,294],t:1.9,w:'sine',v:.09},woodland:{n:[330,392,440,392,330,294,262,330],t:1.4,w:'sine',v:.1}};
+        var p = pat[type] || pat.forest;
+        var self = this;
+        this.currentMusic = type;
+        var loop = function(i) {
+            if (self.currentMusic !== type) return;
+            var o = self.context.createOscillator();
+            var g = self.context.createGain();
+            o.connect(g);
+            g.connect(self.musicGain);
+            o.frequency.value = p.n[i % p.n.length];
+            o.type = p.w;
+            var st = self.context.currentTime;
+            g.gain.setValueAtTime(p.v * vol, st);
+            g.gain.exponentialRampToValueAtTime(0.001, st + p.t * 0.9);
+            o.start(st);
+            o.stop(st + p.t);
+            self.oscillators.push(o);
+            setTimeout(function() { loop((i + 1) % p.n.length); }, p.t * 900);
+        };
+        loop(0);
+        var pad = this.context.createOscillator();
+        var pg = this.context.createGain();
+        pad.connect(pg);
+        pg.connect(this.musicGain);
+        pad.frequency.value = p.n[0] / 2;
+        pad.type = 'sine';
+        pg.gain.value = p.v * 0.6 * vol;
+        pad.start();
+        this.oscillators.push(pad);
+    },
+    playNarrationEnhanced: function(type) {
+        this.stopMusic();
+        if (!this.context || !this.musicGain) return;
+        this.resume();
+        this.playAmbient(type, 1.8);
+        var self = this;
+        var pat = {forest:{n:[262,330,392,330],t:2.5,w:'sine',v:.15},ocean:{n:[196,262,330,262],t:3,w:'sine',v:.12},desert:{n:[294,330,349,392],t:2.8,w:'triangle',v:.1},farm:{n:[330,392,440,392],t:2.3,w:'sine',v:.14},mountain:{n:[392,440,494,440],t:3,w:'triangle',v:.11},wetland:{n:[262,294,330,349],t:2.6,w:'sine',v:.13},grassland:{n:[349,392,440,392],t:2.4,w:'sine',v:.14},rainforest:{n:[440,494,523,494],t:2.7,w:'triangle',v:.11},polar:{n:[330,294,262,294],t:3.5,w:'sine',v:.09},savanna:{n:[294,349,440,349],t:2.6,w:'triangle',v:.12},lake:{n:[262,294,330,349],t:2.9,w:'sine',v:.12},woodland:{n:[330,392,440,392],t:2.4,w:'sine',v:.14}};
+        var p = pat[type] || pat.forest;
+        var loop = function(i) {
+            if (self.currentMusic === 'stop') return;
+            var o = self.context.createOscillator();
+            var g = self.context.createGain();
+            o.connect(g);
+            g.connect(self.musicGain);
+            o.frequency.value = p.n[i % p.n.length];
+            o.type = p.w;
+            var st = self.context.currentTime;
+            g.gain.setValueAtTime(p.v, st);
+            g.gain.exponentialRampToValueAtTime(0.001, st + p.t * 0.95);
+            o.start(st);
+            o.stop(st + p.t);
+            self.oscillators.push(o);
+            if (self.currentMusic === 'stop') return;
+            setTimeout(function() { loop((i + 1) % p.n.length); }, p.t * 900);
+        };
+        loop(0);
+        var pad = this.context.createOscillator();
+        var pg = this.context.createGain();
+        pad.connect(pg);
+        pg.connect(this.musicGain);
+        pad.frequency.value = p.n[0] / 2;
+        pad.type = 'sine';
+        pg.gain.value = p.v * 0.8;
+        pad.start();
+        this.oscillators.push(pad);
+    },
+    playStoryAmbient: function(type) {
+        this.currentMusic = 'stop';
+        this.stopMusic();
+        if (!this.context || !this.musicGain) return;
+        this.resume();
+        this.playAmbient(type, 2.5);
+        var self = this;
+        setTimeout(function() {
+            if (self.currentMusic !== 'stop') return;
+            self.play(220, 'sine', 4, .12);
+            setTimeout(function() { self.play(330, 'sine', 3, .1); }, 2000);
+        }, 500);
+    },
+    playCorrect: function() { this.play(523,'sine',.15); var self=this; setTimeout(function(){self.play(659,'sine',.15,.3)},120); setTimeout(function(){self.play(784,'sine',.22,.35)},240); },
+    playWrong: function() { this.play(180,'sawtooth',.4,.2); var self=this; setTimeout(function(){self.play(130,'sawtooth',.4,.2)},200); },
+    playClick: function() { this.play(880,'sine',.08,.1); },
+    playWin: function() { var self=this; [523,659,784,1047].forEach(function(f,i){setTimeout(function(){self.play(f,'sine',.25,.22)},i*130)}); },
+    playHint: function() { this.play(440,'triangle',.22,.15); var self=this; setTimeout(function(){self.play(550,'triangle',.22,.15)},180); },
+    playCombo: function() { this.play(660,'sine',.1,.22); var self=this; setTimeout(function(){self.play(990,'sine',.15,.25)},90); },
+    playNarration: function() { this.play(330,'sine',.6,.15); var self=this; setTimeout(function(){self.play(440,'sine',.6,.12)},400); },
+    playDuelStart: function() { this.play(440,'square',.2,.15); var self=this; setTimeout(function(){self.play(554,'square',.2,.15)},150); setTimeout(function(){self.play(659,'square',.2,.15)},300); },
+    playDuelWin: function() { var self=this; [880,1109,1318,1760].forEach(function(f,i){setTimeout(function(){self.play(f,'square',.3,.25)},i*100)}); }
+};
+
+function createStars(id) {
+    var c = document.getElementById(id);
+    if (!c) return;
+    c.innerHTML = '';
+    for (var i = 0; i < 80; i++) {
+        var s = document.createElement('div');
+        s.className = 'w-star';
+        s.style.cssText = 'left:' + Math.random()*100 + '%;top:' + Math.random()*100 + '%;width:' + (1+Math.random()*3) + 'px;height:' + (1+Math.random()*3) + 'px;--d:' + (2+Math.random()*4) + 's;--delay:' + Math.random()*5 + 's';
+        c.appendChild(s);
+    }
+}
+
+function closeWelcome() {
+    var w = document.getElementById('welcome-overlay');
+    if (!w) return;
+    w.classList.add('hide');
+    setTimeout(function() {
+        w.style.display = 'none';
+        var rulesOverlay = document.getElementById('rules-overlay');
+        if (rulesOverlay) rulesOverlay.style.display = 'flex';
+    }, 800);
+}
+
+function closeRules() {
+    var r = document.getElementById('rules-overlay');
+    if (!r) return;
+    r.classList.add('hide');
+    setTimeout(function() {
+        r.style.display = 'none';
+        var nameScreen = document.getElementById('name-entry-screen');
+        if (nameScreen) nameScreen.style.display = 'block';
+    }, 700);
+}
+
+function createParticles() {
+    var c = document.getElementById('floating-particles');
+    var sh = ['🍃','🌿','✨','💧','🫧','🌸','🍂','💫'];
+    for (var i = 0; i < 20; i++) {
+        var p = document.createElement('div');
+        p.className = 'particle';
+        p.textContent = sh[Math.floor(Math.random() * sh.length)];
+        p.style.left = Math.random() * 100 + '%';
+        p.style.fontSize = (12 + Math.random() * 18) + 'px';
+        p.style.animationDuration = (12 + Math.random() * 18) + 's';
+        p.style.animationDelay = Math.random() * 12 + 's';
+        c.appendChild(p);
+    }
+}
+
+var weatherInterval = null;
+function setWeather(type) {
+    var c = document.getElementById('weather-container');
+    c.innerHTML = '';
+    if (weatherInterval) clearInterval(weatherInterval);
+    if (document.body.classList.contains('focus-mode')) return;
+    switch(type) {
+        case 'rain':
+            weatherInterval = setInterval(function() {
+                var d = document.createElement('div');
+                d.className = 'rain-drop';
+                d.style.left = Math.random() * 100 + '%';
+                d.style.animationDuration = (0.5 + Math.random() * 0.8) + 's';
+                d.style.opacity = 0.3 + Math.random() * 0.5;
+                c.appendChild(d);
+                setTimeout(function() { d.remove(); }, 1500);
+            }, 80);
+            break;
+        case 'snow':
+            weatherInterval = setInterval(function() {
+                var d = document.createElement('div');
+                d.className = 'snow-flake';
+                d.style.left = Math.random() * 100 + '%';
+                d.style.width = d.style.height = (3 + Math.random() * 8) + 'px';
+                d.style.animationDuration = (4 + Math.random() * 8) + 's';
+                c.appendChild(d);
+                setTimeout(function() { d.remove(); }, 10000);
+            }, 200);
+            break;
+        case 'bubble':
+            weatherInterval = setInterval(function() {
+                var d = document.createElement('div');
+                d.className = 'bubble';
+                d.style.left = Math.random() * 100 + '%';
+                d.style.width = d.style.height = (10 + Math.random() * 30) + 'px';
+                d.style.animationDuration = (3 + Math.random() * 5) + 's';
+                c.appendChild(d);
+                setTimeout(function() { d.remove(); }, 7000);
+            }, 300);
+            break;
+        case 'dust':
+            weatherInterval = setInterval(function() {
+                var d = document.createElement('div');
+                d.className = 'dust-particle';
+                d.style.left = Math.random() * 100 + '%';
+                d.style.width = d.style.height = (3 + Math.random() * 10) + 'px';
+                d.style.animationDuration = (3 + Math.random() * 6) + 's';
+                c.appendChild(d);
+                setTimeout(function() { d.remove(); }, 8000);
+            }, 400);
+            break;
+        default: c.innerHTML = '';
+    }
+}
+function stopWeather() {
+    if (weatherInterval) clearInterval(weatherInterval);
+    document.getElementById('weather-container').innerHTML = '';
+}
+
+function spawnEnergyArrows() {
+    var slots = document.querySelectorAll('#drop-zone .slot.filled');
+    for (var i = 0; i < slots.length - 1; i++) {
+        var s1 = slots[i];
+        var s2 = slots[i + 1];
+        if (s1 && s2) {
+            var r1 = s1.getBoundingClientRect();
+            var r2 = s2.getBoundingClientRect();
+            var startX = r1.left + r1.width / 2;
+            var startY = r1.top + r1.height / 2;
+            var endX = r2.left + r2.width / 2;
+            var endY = r2.top + r2.height / 2;
+            var steps = 8;
+            for (var j = 0; j < steps; j++) {
+                (function(j) {
+                    setTimeout(function() {
+                        var a = document.createElement('div');
+                        a.className = 'energy-arrow';
+                        a.textContent = '⚡';
+                        var progress = j / steps;
+                        a.style.left = (startX + (endX - startX) * progress - 15) + 'px';
+                        a.style.top = (startY + (endY - startY) * progress - 15) + 'px';
+                        a.style.animationDuration = '.6s';
+                        document.body.appendChild(a);
+                        setTimeout(function() { a.remove(); }, 700);
+                    }, j * 60);
+                })(j);
+            }
+        }
+    }
+}
+
+var badgeSystem = { badges: {}, unlocked: [] };
+function checkBadges() {
+    var newBadges = [];
+    if (!badgeSystem.badges['first_complete'] && ci >= 1) { badgeSystem.badges['first_complete'] = true; newBadges.push({icon:'🌱',title:'اولین قدم',desc:'اولین اکوسیستم رو کامل کردی!'}); }
+    if (!badgeSystem.badges['forest_master'] && ci >= 3) { badgeSystem.badges['forest_master'] = true; newBadges.push({icon:'🌳',title:'کاوشگر جنگل',desc:'۳ اکوسیستم رو فتح کردی!'}); }
+    if (!badgeSystem.badges['golden_chain'] && combo >= 5) { badgeSystem.badges['golden_chain'] = true; newBadges.push({icon:'🔥',title:'زنجیره طلایی',desc:'۵ مرحله پشت سر هم بدون اشتباه!'}); }
+    if (!badgeSystem.badges['half_way'] && ci >= 6) { badgeSystem.badges['half_way'] = true; newBadges.push({icon:'🏔️',title:'نیمه راه',desc:'۶ اکوسیستم رو پشت سر گذاشتی!'}); }
+    if (!badgeSystem.badges['all_ecosystems'] && ci >= 12) { badgeSystem.badges['all_ecosystems'] = true; newBadges.push({icon:'🌍',title:'محافظ زمین',desc:'همه ۱۲ اکوسیستم رو کامل کردی!'}); }
+    if (!badgeSystem.badges['high_scorer'] && score >= 1000) { badgeSystem.badges['high_scorer'] = true; newBadges.push({icon:'💎',title:'امتیاز طلایی',desc:'از ۱۰۰۰ امتیاز عبور کردی!'}); }
+    if (newBadges.length > 0) {
+        newBadges.forEach(function(b, i) {
+            setTimeout(function() { showBadge(b); }, i * 2500);
+        });
+    }
+}
+function showBadge(badge) {
+    var popup = document.createElement('div');
+    popup.className = 'badge-popup';
+    popup.innerHTML = '<span class="badge-icon">' + badge.icon + '</span><h3>🏅 ' + badge.title + '</h3><p>' + badge.desc + '</p>';
+    document.body.appendChild(popup);
+    try { AudioSystem.playWin(); } catch(e) {}
+    if (!document.body.classList.contains('focus-mode')) confetti(window.innerWidth/2, window.innerHeight/2, 30);
+    setTimeout(function() {
+        popup.style.animation = 'badgePop .5s ease reverse forwards';
+        setTimeout(function() { popup.remove(); }, 500);
+    }, 3500);
+}
+
+var totalXP = 0;
+var playerLevel = 1;
+var xpThresholds = [0, 100, 250, 500, 900, 1500, 2500, 4000, 6000, 9999];
+var levelNames = ['آماتور','کاوشگر','طبیعت‌گرد','زیست‌شناس','محقق','پروفسور','افسانه','استاد بزرگ'];
+function addXP(amount) {
+    totalXP += amount;
+    var newLevel = 1;
+    for (var i = xpThresholds.length - 1; i >= 0; i--) {
+        if (totalXP >= xpThresholds[i]) { newLevel = i + 1; break; }
+    }
+    if (newLevel > playerLevel) {
+        playerLevel = newLevel;
+        updateXPBar();
+        toast('🎓 ارتقا به سطح ' + playerLevel + ': ' + (levelNames[playerLevel-1]||'???') + '!', 'success', 4000);
+        if (!document.body.classList.contains('focus-mode')) confetti(window.innerWidth/2, window.innerHeight/3, 40);
+    }
+    updateXPBar();
+}
+function updateXPBar() {
+    var bar = document.getElementById('xp-bar-container');
+    if (playerLevel <= 1 && totalXP < 50) { bar.style.display = 'none'; return; }
+    bar.style.display = 'flex';
+    var currThresh = xpThresholds[Math.min(playerLevel-1, xpThresholds.length-1)];
+    var nextThresh = xpThresholds[Math.min(playerLevel, xpThresholds.length-1)] || 9999;
+    var pct = Math.min(100, Math.max(0, ((totalXP - currThresh) / (nextThresh - currThresh)) * 100));
+    document.getElementById('xp-bar-inner').style.width = pct + '%';
+    document.getElementById('xp-level-name').textContent = levelNames[Math.min(playerLevel-1, levelNames.length-1)] || 'آماتور';
+    document.getElementById('xp-level-num').textContent = 'Lv.' + playerLevel;
+}
+
+var errorFeedbackMessages = {
+    'تولیدکننده': 'یادت باشه، تولیدکننده‌ها (مثل گیاهان 🌱) همیشه اول زنجیره غذایی هستن! اون‌ها از نور خورشید غذا می‌سازن.',
+    'مصرف‌کننده': 'مصرف‌کننده‌ها موجوداتی هستن که تولیدکننده‌ها یا مصرف‌کننده‌های دیگه رو می‌خورن. به ترتیبشون دقت کن!',
+    'default': 'دقت کن! هر موجود زنجیره غذایی جایگاه مخصوص خودش رو داره. از کوچک شروع کن و به شکارچی بزرگ برس! 🔍'
+};
+
+var professorErrorQuotes = [
+    {text:'اشکالی نداره! حتی دانشمندان بزرگ هم گاهی اشتباه می‌کنن. بیا دوباره با دقت بیشتری نگاه کنیم! 🔬',icon:'👨‍🔬'},
+    {text:'جایگاه موجودات توی زنجیره غذایی خیلی مهمه. یادت باشه: تولیدکننده ← مصرف‌کننده اول ← مصرف‌کننده دوم...',icon:'👩‍🔬'},
+    {text:'دقت کن! توی طبیعت، انرژی از گیاهان (تولیدکننده) شروع میشه و به شکارچی‌های بزرگتر منتقل میشه. 🌿➡️🦅',icon:'👨‍🔬'},
+    {text:'هر موجود زنجیره غذایی یه نقش داره. بعضی شکارچی هستن، بعضی شکار. به روابطشون دقت کن! 🧐',icon:'👩‍🔬'}
+];
+
+function showErrorFeedback(wrongSlotIndex, stageData) {
+    var feedbackText = errorFeedbackMessages['default'];
+    if (wrongSlotIndex === 0) feedbackText = errorFeedbackMessages['تولیدکننده'];
+    else if (wrongSlotIndex > 0) feedbackText = errorFeedbackMessages['مصرف‌کننده'];
+    
+    var ex = document.querySelector('.professor-popup');
+    if (ex) ex.remove();
+    
+    var q = professorErrorQuotes[Math.floor(Math.random() * professorErrorQuotes.length)];
+    var p = document.createElement('div');
+    p.className = 'professor-popup';
+    p.innerHTML = '<span class="prof-avatar">' + q.icon + '</span><span class="prof-text">' + q.text + '<br><small style="color:#fbbf24">💡 ' + feedbackText + '</small></span>';
+    p.style.borderColor = 'rgba(239,68,68,.5)';
+    document.body.appendChild(p);
+    setTimeout(function() {
+        p.style.animation = 'profSlide .5s ease reverse forwards';
+        setTimeout(function() { p.remove(); }, 500);
+    }, 6000);
+}
+
+var professorQuotes = [
+    {text:'آفرین! می‌دونستی گیاهان با نور خورشید غذا می‌سازن؟ بهش میگن فتوسنتز! 🌿',icon:'👨‍🔬'},
+    {text:'عالیه! هر موجود زنده‌ای توی زنجیره غذایی یه نقش مهم داره. حتی باکتری‌ها! 🦠',icon:'👨‍🔬'},
+    {text:'دقت کردی تولیدکننده‌ها همیشه اول زنجیره هستن؟ اون‌ها پایه حیات روی زمین هستن! 🌍',icon:'👨‍🔬'},
+    {text:'شکارچی‌های رأس هرم، مثل شیر و عقاب، جمعیت بقیه حیوانات رو متعادل نگه می‌دارن. 🦁',icon:'👨‍🔬'}
+];
+function showProfessor() {
+    if (document.body.classList.contains('focus-mode')) return;
+    var q = professorQuotes[Math.floor(Math.random() * professorQuotes.length)];
+    var ex = document.querySelector('.professor-popup');
+    if (ex) ex.remove();
+    var p = document.createElement('div');
+    p.className = 'professor-popup';
+    p.innerHTML = '<span class="prof-avatar">' + q.icon + '</span><span class="prof-text">' + q.text + '</span>';
+    document.body.appendChild(p);
+    setTimeout(function() {
+        p.style.animation = 'profSlide .5s ease reverse forwards';
+        setTimeout(function() { p.remove(); }, 500);
+    }, 5000);
+}
+
+function toast(m, t, d) {
+    if (document.body.classList.contains('focus-mode') && (t === 'info' || t === 'success')) return;
+    t = t || 'info';
+    d = d || 3000;
+    var c = document.getElementById('toast-container');
+    var el = document.createElement('div');
+    el.className = 'toast ' + t;
+    var icons = {success:'✅', error:'❌', warning:'⚠️', info:'💡'};
+    el.innerHTML = '<span style="font-size:20px">' + (icons[t]||'💡') + '</span> ' + m;
+    c.appendChild(el);
+    setTimeout(function() { el.style.opacity = '0'; el.style.transform = 'scale(.9)'; setTimeout(function() { el.remove(); }, 400); }, d);
+}
+function showNarration(t, d) {
+    d = d || 7000;
+    var ex = document.querySelector('.narration-overlay');
+    if (ex) ex.remove();
+    var o = document.createElement('div');
+    o.className = 'narration-overlay';
+    o.innerHTML = '<span style="font-size:28px;display:block;margin-bottom:6px">📖</span>' + t;
+    document.body.appendChild(o);
+    try { AudioSystem.playNarration(); } catch(e) {}
+    setTimeout(function() { o.classList.add('hide'); setTimeout(function() { o.remove(); }, 600); }, d);
+}
+function sanitize(s) {
+    if (!s) return '';
+    var d = document.createElement('div');
+    d.textContent = String(s);
+    return d.innerHTML;
+}
+function toggleA11y() {
+    document.body.classList.toggle('accessibility-mode');
+    document.getElementById('a11y-btn').classList.toggle('active');
+    localStorage.setItem('a11yMode', document.body.classList.contains('accessibility-mode'));
+}
+if (localStorage.getItem('a11yMode') === 'true') {
+    document.body.classList.add('accessibility-mode');
+    document.getElementById('a11y-btn').classList.add('active');
+}
+
+function confetti(x, y, n) {
+    if (document.body.classList.contains('focus-mode')) return;
+    n = n || 50;
+    var cl = ['#fbbf24','#f59e0b','#10b981','#6c5ce7','#ef4444','#3b82f6','#ec4899','#14b8a6','#8b5cf6','#f97316'];
+    for (var i = 0; i < n; i++) {
+        (function(i) {
+            setTimeout(function() {
+                var p = document.createElement('div');
+                var s = 5 + Math.random() * 15;
+                p.style.cssText = 'position:fixed;left:' + (x + (Math.random() - 0.5) * 400) + 'px;top:' + (y - 40) + 'px;width:' + s + 'px;height:' + (s * 1.5) + 'px;background:' + cl[Math.floor(Math.random() * cl.length)] + ';border-radius:' + (Math.random() > 0.5 ? '50%' : '3px') + ';z-index:9999;pointer-events:none;animation:confettiFall ' + (2 + Math.random() * 2.5) + 's ease-in forwards;transform:rotate(' + (Math.random() * 360) + 'deg)';
+                document.body.appendChild(p);
+                setTimeout(function() { p.remove(); }, 3500);
+            }, i * 10);
+        })(i);
+    }
+}
+function starBurst(x, y, n) {
+    if (document.body.classList.contains('focus-mode')) return;
+    n = n || 12;
+    var e = ['⭐','🌟','✨','💫','🔥','💥','🎉','🏆','💎','🌈'];
+    for (var i = 0; i < n; i++) {
+        (function(i) {
+            setTimeout(function() {
+                var s = document.createElement('div');
+                s.style.cssText = 'position:fixed;left:' + (x + (Math.random() - 0.5) * 250) + 'px;top:' + (y + (Math.random() - 0.5) * 250) + 'px;font-size:' + (25 + Math.random() * 35) + 'px;z-index:9998;pointer-events:none;animation:starExplode 1.4s ease-out forwards';
+                s.textContent = e[Math.floor(Math.random() * e.length)];
+                document.body.appendChild(s);
+                setTimeout(function() { s.remove(); }, 1800);
+            }, i * 40);
+        })(i);
+    }
+}
+function animateScore(pts) {
+    var el = document.getElementById('score-value');
+    if (!el) return;
+    var r = el.getBoundingClientRect();
+    var fs = document.createElement('div');
+    fs.textContent = '+' + pts;
+    fs.style.cssText = 'position:fixed;top:' + (r.top - 15) + 'px;left:' + (r.left + r.width/2 - 20) + 'px;color:#f59e0b;font-weight:900;font-size:24px;pointer-events:none;z-index:9999;animation:floatScore 1.6s ease-out forwards;text-shadow:0 0 12px rgba(245,158,11,.5)';
+    document.body.appendChild(fs);
+    setTimeout(function() { fs.remove(); }, 2000);
+}
+
+var scienceFacts = [
+    {emoji:'🍃',title:'فتوسنتز شگفت‌انگیز!',text:'آیا می‌دونستی گیاهان با فرآیند فتوسنتز، نور خورشید رو به غذا تبدیل می‌کنن؟ هر سال گیاهان زمین حدود ۱۰۰ میلیارد تن کربن رو از هوا جذب می‌کنن!',source:'منبع: National Geographic'},
+    {emoji:'🦅',title:'عقاب؛ پادشاه آسمان',text:'عقاب‌ها می‌تونن از فاصله ۳ کیلومتری یک خرگوش رو ببینن! چشماشون ۴ برابر قوی‌تر از چشم انسانه.',source:'منبع: BBC Earth'},
+    {emoji:'🦠',title:'فیتوپلانکتون؛ قهرمان کوچک',text:'باورت میشه بیش از ۵۰٪ اکسیژن زمین توسط فیتوپلانکتون‌های ریز اقیانوسی تولید میشه؟',source:'منبع: NOAA'}
+];
+
+function showScienceFact(callback) {
+    var fact = scienceFacts[Math.floor(Math.random() * scienceFacts.length)];
+    var overlay = document.createElement('div');
+    overlay.className = 'science-modal';
+    overlay.id = 'science-fact-overlay';
+    overlay.innerHTML = '<div class="science-card"><span class="s-icon">' + fact.emoji + '</span><h2>' + fact.title + '</h2><div class="s-text">' + fact.text + '</div><div class="s-source">📚 ' + fact.source + '</div><button class="s-btn" id="science-next-btn">🚀 ادامه ماجراجویی</button></div>';
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', function(e) { if (e.target === this) { this.remove(); if (callback) callback(); } });
+    document.getElementById('science-next-btn').addEventListener('click', function() { overlay.remove(); if (callback) callback(); });
+    try { AudioSystem.playWin(); } catch(e) {}
+}
+
+var stages = [
+    {id:1,eco:"🌳 جنگل",key:"forest",weather:"rain",title:"زنجیره جنگل سبز",bg:"linear-gradient(135deg,#e8f5e9,#c8e6c9)",color:"#2e7d32",accent:"#a5d6a7",story:"در دل جنگلی سرسبز، برگ درختان با نور خورشید غذا می‌سازد. کرمی گرسنه از برگ تغذیه می‌کند و گنجشکی شکارچی، کرم را می‌رباید. در آسمان، عقاب قدرتمند پرواز می‌کند... 🌳🦅",correct:["برگ","کرم","گنجشک","عقاب"],pool:[{n:"برگ",e:"🍃"},{n:"کرم",e:"🐛"},{n:"گنجشک",e:"🐦"},{n:"عقاب",e:"🦅"},{n:"جلبک",e:"🌿"},{n:"گربه",e:"🐈"}],time:{easy:999,normal:50,hard:25},base:150},
+    {id:2,eco:"🌊 اقیانوس",key:"ocean",weather:"bubble",title:"زنجیره اعماق دریا",bg:"linear-gradient(135deg,#e1f5fe,#b3e5fc)",color:"#0277bd",accent:"#81d4fa",story:"در اعماق آب‌های نیلگون، فیتوپلانکتون‌های ریز با فتوسنتز، انرژی خورشید را ذخیره می‌کنند. زئوپلانکتون‌ها از آن‌ها تغذیه می‌کنند و ماهی‌های کوچک شکارشان می‌کنند... 🌊🐋",correct:["فیتوپلانکتون","زئوپلانکتون","ماهی کوچک","ماهی بزرگ","کوسه"],pool:[{n:"فیتوپلانکتون",e:"🦠"},{n:"زئوپلانکتون",e:"🦐"},{n:"ماهی کوچک",e:"🐟"},{n:"ماهی بزرگ",e:"🐠"},{n:"کوسه",e:"🦈"},{n:"نهنگ",e:"🐋"},{n:"جلبک",e:"🌿"}],time:{easy:999,normal:60,hard:30},base:200},
+    {id:3,eco:"🏜️ بیابان",key:"desert",weather:"dust",title:"زنجیره بیابان داغ",bg:"linear-gradient(135deg,#fff3e0,#ffe0b2)",color:"#ef6c00",accent:"#ffcc80",story:"زیر آفتاب سوزان بیابان، دانه‌های گیاهان مقاوم می‌رویند. موشی کوچک از دانه‌ها تغذیه می‌کند اما باید مراقب مارهای شکارچی باشد... 🏜️🐍",correct:["دانه","موش","مار","جغد"],pool:[{n:"دانه",e:"🌻"},{n:"موش",e:"🐭"},{n:"مار",e:"🐍"},{n:"جغد",e:"🦉"},{n:"علف",e:"🌱"},{n:"عقرب",e:"🦂"}],time:{easy:999,normal:45,hard:22},base:150},
+    {id:4,eco:"🌾 مزرعه",key:"farm",weather:null,title:"زنجیره مزرعه سرسبز",bg:"linear-gradient(135deg,#f1f8e9,#dcedc8)",color:"#558b2f",accent:"#c5e1a5",story:"در مزرعه‌ای طلایی، گندم‌ها با نسیم می‌رقصند. موش‌ها از دانه‌های گندم تغذیه می‌کنند، اما مارها در کمین آن‌ها هستند... 🌾🦊",correct:["گندم","موش","مار","روباه"],pool:[{n:"گندم",e:"🌾"},{n:"موش",e:"🐭"},{n:"مار",e:"🐍"},{n:"روباه",e:"🦊"},{n:"برگ",e:"🍃"},{n:"گاو",e:"🐄"}],time:{easy:999,normal:45,hard:22},base:150},
+    {id:5,eco:"🏔️ کوهستان",key:"mountain",weather:"snow",title:"زنجیره ارتفاعات",bg:"linear-gradient(135deg,#eceff1,#cfd8dc)",color:"#455a64",accent:"#b0bec5",story:"در ارتفاعات بلند کوهستان، علف‌های مقاوم می‌رویند. بزهای کوهی چابک از آن‌ها می‌چرند و پلنگ‌های باشکوه شکارشان می‌کنند... 🏔️🐆",correct:["علف","بز کوهی","پلنگ","کرکس"],pool:[{n:"علف",e:"🌱"},{n:"بز کوهی",e:"🐐"},{n:"پلنگ",e:"🐆"},{n:"کرکس",e:"🦅"},{n:"میوه",e:"🍌"},{n:"خرس",e:"🐻"}],time:{easy:999,normal:50,hard:25},base:170},
+    {id:6,eco:"🦩 تالاب",key:"wetland",weather:"rain",title:"زنجیره تالاب آرام",bg:"linear-gradient(135deg,#e0f2f1,#b2dfdb)",color:"#00695c",accent:"#80cbc4",story:"در تالابی آرام، جلبک‌ها روی آب شناورند. حلزون‌ها از جلبک‌ها تغذیه می‌کنند. ماهی‌ها حلزون‌ها را می‌خورند... 🦩🐊",correct:["جلبک","حلزون","ماهی","قورباغه","مار آبی","تمساح"],pool:[{n:"جلبک",e:"🌿"},{n:"حلزون",e:"🐌"},{n:"ماهی",e:"🐟"},{n:"قورباغه",e:"🐸"},{n:"مار آبی",e:"🐍"},{n:"تمساح",e:"🐊"},{n:"برگ",e:"🍃"}],time:{easy:999,normal:70,hard:35},base:250},
+    {id:7,eco:"🌿 علفزار",key:"grassland",weather:null,title:"زنجیره دشت وسیع",bg:"linear-gradient(135deg,#fffde7,#fff9c4)",color:"#f9a825",accent:"#fff176",story:"در دشتی پهناور، علف‌ها تا افق گسترده شده‌اند. ملخ‌ها از علف‌ها می‌خورند. موش‌ها ملخ‌ها را شکار می‌کنند... 🌿🦉",correct:["علف","ملخ","موش","مار","جغد","روباه"],pool:[{n:"علف",e:"🌱"},{n:"ملخ",e:"🦗"},{n:"موش",e:"🐭"},{n:"مار",e:"🐍"},{n:"جغد",e:"🦉"},{n:"روباه",e:"🦊"},{n:"دانه",e:"🌻"},{n:"گوزن",e:"🦌"}],time:{easy:999,normal:75,hard:38},base:260},
+    {id:8,eco:"🌴 جنگل بارانی",key:"rainforest",weather:"rain",title:"زنجیره جنگل استوایی",bg:"linear-gradient(135deg,#e8f5e9,#a5d6a7)",color:"#1b5e20",accent:"#66bb6a",story:"در جنگلی انبوه و پرباران، میوه‌های رنگارنگ روی درختان می‌درخشند. میمون‌ها از میوه‌ها تغذیه می‌کنند... 🌴🐆",correct:["میوه","میمون","پلنگ","کرکس","باکتری"],pool:[{n:"میوه",e:"🍌"},{n:"میمون",e:"🐒"},{n:"پلنگ",e:"🐆"},{n:"کرکس",e:"🦅"},{n:"باکتری",e:"🦠"},{n:"برگ",e:"🍃"},{n:"طوطی",e:"🦜"}],time:{easy:999,normal:55,hard:28},base:210},
+    {id:9,eco:"❄️ قطب",key:"polar",weather:"snow",title:"زنجیره قطب جنوب",bg:"linear-gradient(135deg,#e3f2fd,#bbdefb)",color:"#1565c0",accent:"#90caf9",story:"در سرمای قطبی، فیتوپلانکتون‌ها زیر یخ‌ها زندگی می‌کنند. کریل‌های ریز از آن‌ها تغذیه می‌کنند... ❄️🐋",correct:["فیتوپلانکتون","کریل","ماهی","پنگوئن","فک","نهنگ قاتل"],pool:[{n:"فیتوپلانکتون",e:"🦠"},{n:"کریل",e:"🦐"},{n:"ماهی",e:"🐟"},{n:"پنگوئن",e:"🐧"},{n:"فک",e:"🦭"},{n:"نهنگ قاتل",e:"🐋"},{n:"جلبک",e:"🌿"},{n:"خرس قطبی",e:"🐻‍❄️"}],time:{easy:999,normal:80,hard:40},base:310},
+    {id:10,eco:"🏞️ دریاچه",key:"lake",weather:"bubble",title:"🔄 چرخه دریاچه",bg:"linear-gradient(135deg,#e0f7fa,#b2ebf2)",color:"#00838f",accent:"#4dd0e1",story:"در دریاچه‌ای آرام، جلبک‌ها رشد می‌کنند. حشرات آبزی از جلبک‌ها تغذیه می‌کنند. ماهی کوچک حشرات را می‌خورد... 🏞️🦅",correct:["جلبک","حشره آبزی","ماهی کوچک","ماهی بزرگ","پرنده ماهیخوار","باکتری"],pool:[{n:"جلبک",e:"🌿"},{n:"حشره آبزی",e:"🦟"},{n:"ماهی کوچک",e:"🐟"},{n:"ماهی بزرگ",e:"🐠"},{n:"پرنده ماهیخوار",e:"🦅"},{n:"باکتری",e:"🦠"},{n:"برگ",e:"🍃"},{n:"قورباغه",e:"🐸"},{n:"لاک‌پشت",e:"🐢"}],time:{easy:999,normal:85,hard:43},base:320},
+    {id:11,eco:"🦁 ساوانا",key:"savanna",weather:"dust",title:"🔄 شبکه ساوانا",bg:"linear-gradient(135deg,#fff8e1,#ffecb3)",color:"#ff8f00",accent:"#ffd54f",story:"در دشت‌های طلایی ساوانا، علف‌ها می‌رویند. گورخر از علف‌ها می‌چرد. شیر قدرتمند گورخر را شکار می‌کند... 🦁🦅",correct:["علف","گورخر","شیر","کفتار","کرکس","قارچ","باکتری"],pool:[{n:"علف",e:"🌱"},{n:"گورخر",e:"🦓"},{n:"شیر",e:"🦁"},{n:"کفتار",e:"🐺"},{n:"کرکس",e:"🦅"},{n:"قارچ",e:"🍄"},{n:"باکتری",e:"🦠"},{n:"دانه",e:"🌻"},{n:"فیل",e:"🐘"},{n:"زرافه",e:"🦒"}],time:{easy:999,normal:100,hard:50},base:370},
+    {id:12,eco:"🌳 جنگل پهن‌برگ",key:"woodland",weather:"rain",title:"🔄 چرخه کامل جنگل",bg:"linear-gradient(135deg,#e8f5e9,#a5d6a7)",color:"#1b5e20",accent:"#66bb6a",story:"در جنگلی کهن، بلوط‌ها می‌ریزند. سنجاب دانه‌ها را جمع می‌کند. روباه سنجاب را شکار می‌کند... 🌳🐺",correct:["بلوط","سنجاب","روباه","گرگ","خرس","هزارپا","قارچ","باکتری"],pool:[{n:"بلوط",e:"🌰"},{n:"سنجاب",e:"🐿️"},{n:"روباه",e:"🦊"},{n:"گرگ",e:"🐺"},{n:"خرس",e:"🐻"},{n:"هزارپا",e:"🐛"},{n:"قارچ",e:"🍄"},{n:"باکتری",e:"🦠"},{n:"برگ",e:"🍃"},{n:"گوزن",e:"🦌"},{n:"جغد",e:"🦉"}],time:{easy:999,normal:120,hard:60},base:420}
+];
+
+function getGrades(){try{return JSON.parse(localStorage.getItem('fcGrades')||'[]')}catch(e){return[]}}
+function getGrade(n){return getGrades().find(function(x){return x.name===n})||null}
+function saveGrade(n,s,d){try{var g=getGrades();var i=g.findIndex(function(x){return x.name===n});if(i>=0){if(s>g[i].score)g[i]={name:n,score:s,difficulty:d,date:new Date().toLocaleDateString('fa-IR')}}else g.push({name:n,score:s,difficulty:d,date:new Date().toLocaleDateString('fa-IR')});g.sort(function(a,b){return b.score-a.score});localStorage.setItem('fcGrades',JSON.stringify(g))}catch(e){}}
+function getErrors(){try{return JSON.parse(localStorage.getItem('fcErrors')||'{}')}catch(e){return{}}}
+function recordError(si,sli){try{var e=getErrors();var k=si+'-'+sli;e[k]=(e[k]||0)+1;localStorage.setItem('fcErrors',JSON.stringify(e))}catch(e){}}
+function checkPrev(n){var g=getGrade(n);var d=document.getElementById('prev-score-display');if(g){d.style.display='block';document.getElementById('prev-score-value').textContent=g.score;document.getElementById('current-best-score').textContent=g.score+' ('+(g.difficulty==='easy'?'ساده':g.difficulty==='normal'?'معمولی':'حرفه‌ای')+')'}else{d.style.display='none';document.getElementById('current-best-score').textContent='هنوز بازی نکردی'}}
+function saveProgress(){if(gameActive&&ci>0)try{localStorage.setItem('fcProgress',JSON.stringify({name:studentName,stage:ci,score:score,combo:combo,diff:selectedDifficulty,date:Date.now()}))}catch(e){}}
+function loadProgress(){try{var s=JSON.parse(localStorage.getItem('fcProgress'));if(s&&s.name===studentName&&s.date>Date.now()-86400000)return s}catch(e){}return null}
+function clearProgress(){try{localStorage.removeItem('fcProgress')}catch(e){}}
+
+var tc=0;
+document.getElementById('designer-credit').addEventListener('click',function(){
+    tc++;
+    if(tc>=5){
+        tc=0;
+        var p=prompt('🔑 رمز پنل معلم:');
+        if(p==='Teacher1405'){
+            var a=prompt('🎓 پنل معلم\n\n1- ⏱ تایمر\n2- 📚 دانستنی\n3- 💡 راهنمایی\n4- 🎯 فوکوس مود\n5- 🗑️ ریست\n6- 📊 بازخورد\n7- 📋 نمرات\n8- 🖨️ پرینت\n9- 🎵 موسیقی');
+            if(!a)return;
+            switch(a.trim()){
+                case'1':var ct=localStorage.getItem('tcTimer')!=='false';localStorage.setItem('tcTimer',!ct);toast('✅ تایمر '+(!ct?'فعال':'غیرفعال')+' شد','success');break;
+                case'2':var ck=localStorage.getItem('tcKnowledge')!=='false';localStorage.setItem('tcKnowledge',!ck);toast('✅ دانستنی '+(!ck?'فعال':'غیرفعال')+' شد','success');break;
+                case'3':var mh=prompt('حداکثر راهنمایی (۱-۱۰):',localStorage.getItem('tcHints')||'3');if(mh){var mhi=parseInt(mh);if(mhi>=1&&mhi<=10){localStorage.setItem('tcHints',String(mhi));toast('✅ '+mhi+' راهنمایی','success')}else toast('❌ عدد ۱-۱۰','error')}break;
+                case'4':var fm=localStorage.getItem('focusMode')!=='true';localStorage.setItem('focusMode',fm);if(fm){document.body.classList.add('focus-mode');toast('🎯 فوکوس مود فعال شد - حواس پرتی‌ها غیرفعال شدن','success')}else{document.body.classList.remove('focus-mode');toast('🎯 فوکوس مود غیرفعال شد','info')}break;
+                case'5':if(confirm('⚠️ همه داده‌ها پاک شود؟')){['fcGrades','fcErrors','fcProgress'].forEach(function(k){try{localStorage.removeItem(k)}catch(e){}});toast('✅ پاک شد','success')}break;
+                case'6':showAnalytics();break;
+                case'7':showGrades();break;
+                case'8':showGrades();setTimeout(function(){window.print()},500);break;
+                case'9':var cm=localStorage.getItem('music')!=='false';localStorage.setItem('music',!cm);if(cm)AudioSystem.stopMusic();toast('🎵 '+(!cm?'فعال':'قطع')+' شد','success');break;
+            }
+        } else toast('❌ رمز اشتباه','error');
+    }
+    setTimeout(function(){tc=0},3000);
+});
+
+function showGrades(){
+    var g=getGrades();var m=document.createElement('div');m.className='modal';m.style.display='flex';m.setAttribute('aria-label','جدول نمرات');
+    m.innerHTML='<div class="modal-card" style="border-color:rgba(245,158,11,.5);max-width:680px"><h1>📋 نمرات</h1><div id="gc"></div><button class="btn btn-check" onclick="this.closest(\'.modal\').remove()" aria-label="بستن">بستن</button></div>';
+    m.addEventListener('click',function(e){if(e.target===this)this.remove()});document.body.appendChild(m);
+    var c=m.querySelector('#gc');if(!g.length){c.innerHTML='<p style="padding:25px">نمره‌ای ثبت نشده</p>';return}
+    var t=document.createElement('table');t.style.cssText='width:100%;border-collapse:collapse;margin:12px 0';t.setAttribute('aria-label','جدول نمرات');
+    t.innerHTML='<tr style="background:#f59e0b;color:#1e293b"><th>رتبه</th><th>نام</th><th>امتیاز</th><th>سطح</th><th>تاریخ</th></tr>';
+    g.forEach(function(x,i){
+        var r=document.createElement('tr');r.style.cssText='border-bottom:1px solid #e2e8f0';
+        if(studentName&&x.name===studentName)r.style.background='rgba(254,243,199,.6)';
+        r.innerHTML='<td style="padding:12px;text-align:center">'+(i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1))+'</td><td style="padding:12px"><b>'+sanitize(x.name)+'</b></td><td style="padding:12px;color:#6c5ce7;font-weight:900">'+x.score+'</td><td style="padding:12px">'+(x.difficulty==='easy'?'🌱ساده':x.difficulty==='normal'?'⚡معمولی':'🔥حرفه‌ای')+'</td><td style="padding:12px">'+sanitize(x.date)+'</td>';
+        t.appendChild(r);
+    });
+    c.appendChild(t);
+}
+
+function showAnalytics(){
+    var s=getErrors();var m=document.createElement('div');m.className='modal';m.style.display='flex';m.setAttribute('aria-label','تحلیل خطاها');
+    m.innerHTML='<div class="modal-card" style="border-color:rgba(108,92,231,.5);max-width:680px"><h1>📊 بازخورد</h1><div id="ac"></div><button class="btn btn-check" onclick="this.closest(\'.modal\').remove()" aria-label="بستن">بستن</button></div>';
+    m.addEventListener('click',function(e){if(e.target===this)this.remove()});document.body.appendChild(m);
+    var c=m.querySelector('#ac');if(!Object.keys(s).length){c.innerHTML='<p style="padding:25px">داده‌ای ثبت نشده</p>';return}
+    var t=document.createElement('table');t.style.cssText='width:100%;border-collapse:collapse;margin:12px 0';t.setAttribute('aria-label','جدول تحلیل خطاها');
+    t.innerHTML='<tr style="background:#6c5ce7;color:#fff"><th>اکوسیستم</th><th>جایگاه</th><th>خطا</th><th>وضعیت</th></tr>';
+    Object.entries(s).sort(function(a,b){return b[1]-a[1]}).forEach(function(e){
+        var k=e[0],v=e[1],parts=k.split('-'),si=parseInt(parts[0]),sli=parseInt(parts[1]);
+        var st=stages[si],lb=sli===0?'🥇تولیدکننده':'مصرف‌کننده '+sli;
+        var sts=v>=5?'🔴بازآموزی':v>=3?'🟡تمرین':'🟢خوب';
+        var r=document.createElement('tr');r.style.cssText='border-bottom:1px solid #e2e8f0';
+        r.innerHTML='<td style="padding:10px">'+sanitize(st?st.eco:'؟')+'</td><td style="padding:10px">'+sanitize(lb)+'</td><td style="padding:10px;color:'+(v>=5?'#ef4444':v>=3?'#f59e0b':'#10b981')+';font-weight:900;font-size:17px">'+v+'</td><td style="padding:10px">'+sts+'</td>';
+        t.appendChild(r);
+    });
+    c.appendChild(t);
+}
+
+var studentName='';
+function validateName(n){
+    if(!n||n.length<2)return 'اسم باید حداقل ۲ حرف باشه';
+    if(n.length>20)return 'اسم نمی‌تونه بیشتر از ۲۰ حرف باشه';
+    if(!/^[\u0600-\u06FF\u0750-\u077F\w\s]+$/.test(n))return 'فقط از حروف فارسی و انگلیسی استفاده کن';
+    return null;
+}
+function submitName(){
+    var i=document.getElementById('student-name-input'),n=i.value.trim();
+    var err=validateName(n);
+    if(err){document.getElementById('name-error').textContent='⚠️ '+err;document.getElementById('name-error').style.display='block';return}
+    document.getElementById('name-error').style.display='none';
+    studentName=sanitize(n);
+    document.getElementById('student-name-value').textContent=studentName;
+    document.getElementById('student-name-display').style.display='flex';
+    document.getElementById('welcome-name').textContent=studentName;
+    checkPrev(studentName);
+    var sp=loadProgress();
+    if(sp){
+        var cont=confirm('📂 '+studentName+'!\n\nبازی ناتمام:\n🌍 مرحله '+(sp.stage+1)+' از ۱۲\n⭐ '+sp.score+' امتیاز\n\nادامه میدی؟');
+        if(cont){
+            document.getElementById('name-entry-screen').style.display='none';
+            document.getElementById('difficulty-screen').style.display='none';
+            document.getElementById('game-screen').style.display='block';
+            gameActive=true;score=sp.score;combo=sp.combo;ci=sp.stage;selectedDifficulty=sp.diff;
+            totalXP=score;updateXPBar();document.getElementById('xp-bar-container').style.display='flex';
+            document.getElementById('score-value').textContent=score;
+            document.getElementById('combo-display').style.display=combo>1?'flex':'none';
+            if(combo>1)document.getElementById('combo-value').textContent=combo;
+            loadStage();return;
+        } else clearProgress();
+    }
+    document.getElementById('name-entry-screen').style.display='none';
+    document.getElementById('difficulty-screen').style.display='block';
+    try{AudioSystem.playClick()}catch(e){}
+    updateXPBar();document.getElementById('xp-bar-container').style.display='flex';
+    try{localStorage.setItem('lastName',studentName)}catch(e){}
+}
+document.getElementById('student-name-input').addEventListener('keypress',function(e){if(e.key==='Enter')submitName()});
+
+var preOk=false;
+function preAssess(a){preOk=(a==='correct');document.getElementById('pre-result').textContent=preOk?'✅ آفرین! گیاهان با نور خورشید غذا می‌سازن! 🌱':'❌ گیاهان 🌱 تولیدکننده هستن - اون‌ها غذای خودشون رو می‌سازن!';document.getElementById('pre-result').style.color=preOk?'#059669':'#dc2626';try{preOk?AudioSystem.playCorrect():AudioSystem.playWrong()}catch(e){}}
+
+var ci=0,score=0,combo=0,timerInterval=null,timeLeft=0,selectedDifficulty='normal',dragSource=null,selectedOrganism=null,gameActive=false,touchClone=null,isTouchDragging=false,stageCompleted=false,hintCount=0,prevBest=0,firstErrorThisStage=false;
+
+function mkClone(org){rmClone();var c=document.createElement('div');c.className='touch-clone';c.innerHTML=org.innerHTML;c.style.position='fixed';c.style.pointerEvents='none';c.style.zIndex='9999';document.body.appendChild(c);return c}
+function rmClone(){if(touchClone){touchClone.remove();touchClone=null}}
+function moveClone(x,y){if(touchClone){touchClone.style.left=x+'px';touchClone.style.top=y+'px'}}
+function setupTouch(org){
+    org.addEventListener('touchstart',function(e){
+        if(this.classList.contains('used'))return;
+        e.preventDefault();
+        isTouchDragging=false;dragSource=this;selectedOrganism=this;
+        this.classList.add('selected');
+        this._sx=e.touches[0].clientX;this._sy=e.touches[0].clientY;
+    },{passive:false});
+    org.addEventListener('touchmove',function(e){
+        if(!dragSource||dragSource!==this)return;
+        e.preventDefault();
+        var t=e.touches[0];
+        if(!isTouchDragging&&(Math.abs(t.clientX-this._sx)>8||Math.abs(t.clientY-this._sy)>8)){
+            isTouchDragging=true;touchClone=mkClone(this);try{AudioSystem.playClick()}catch(e){}
+        }
+        if(isTouchDragging){
+            moveClone(t.clientX,t.clientY);
+            document.querySelectorAll('.slot').forEach(function(s){s.classList.remove('drag-over')});
+            var eb=document.elementFromPoint(t.clientX,t.clientY);
+            if(eb){var sl=eb.closest('.slot');if(sl&&!sl.classList.contains('filled'))sl.classList.add('drag-over')}
+        }
+    },{passive:false});
+    org.addEventListener('touchend',function(e){
+        if(!dragSource||dragSource!==this)return;
+        e.preventDefault();
+        document.querySelectorAll('.slot').forEach(function(s){s.classList.remove('drag-over')});
+        if(isTouchDragging&&touchClone){
+            var t=e.changedTouches[0],eb=document.elementFromPoint(t.clientX,t.clientY);
+            if(eb){var sl=eb.closest('.slot');if(sl&&!sl.classList.contains('filled')){var st=stages[ci],it=st.pool.find(function(p){return p.n===this.dataset.name}.bind(this));if(it)fillSlot(sl,it)}}
+        }
+        rmClone();this.classList.remove('selected');dragSource=null;selectedOrganism=null;isTouchDragging=false;
+    },{passive:false});
+}
+
+function showEcosystemStory(stageData, callback){
+    try{AudioSystem.playStoryAmbient(stageData.key)}catch(e){}
+    var overlay=document.createElement('div');
+    overlay.className='story-overlay';
+    overlay.setAttribute('aria-label','داستان اکوسیستم');
+    var storyIconMap={forest:'🌳',ocean:'🌊',desert:'🏜️',farm:'🌾',mountain:'🏔️',wetland:'🦩',grassland:'🌿',rainforest:'🌴',polar:'❄️',lake:'🏞️',savanna:'🦁',woodland:'🌳'};
+    overlay.innerHTML='<div class="story-content"><span class="story-icon">'+(storyIconMap[stageData.key]||'🌍')+'</span><h2 class="story-title">'+stageData.eco+'</h2><p class="story-text">'+stageData.story+'</p><p class="story-tap">👆 لمس کن تا وارد بشی...</p></div>';
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click',function(){
+        overlay.style.animation='fadeOut .5s ease forwards';
+        setTimeout(function(){
+            overlay.remove();
+            try{AudioSystem.stopMusic();AudioSystem.playMusic(stageData.key)}catch(e){}
+            if(callback)callback();
+        },500);
+    });
+}
+
+function startGame(diff){
+    selectedDifficulty=diff;
+    var g=getGrade(studentName);prevBest=g?g.score:0;
+    gameActive=true;score=0;combo=0;ci=0;stageCompleted=false;hintCount=0;firstErrorThisStage=false;clearProgress();
+    document.getElementById('difficulty-screen').style.display='none';
+    document.getElementById('game-screen').style.display='block';
+    document.getElementById('duel-screen').style.display='none';
+    document.getElementById('score-value').textContent='0';
+    document.getElementById('combo-display').style.display='none';
+    document.getElementById('stage-text').textContent='مرحله ۱ از ۱۲';
+    try{AudioSystem.init();AudioSystem.resume()}catch(e){}
+    var firstStage=stages[0];
+    showEcosystemStory(firstStage,function(){loadStage()});
+}
+
+function loadStage(){
+    if(!gameActive||ci>=stages.length){finishGame();return}
+    var s=stages[ci];stageCompleted=false;hintCount=0;firstErrorThisStage=false;
+    document.getElementById('combo-display').style.display=combo>1?'flex':'none';
+    if(combo>1)document.getElementById('combo-value').textContent=combo;
+    saveProgress();
+    document.body.style.background=s.bg;
+    document.documentElement.style.setProperty('--eco-color',s.color);
+    document.documentElement.style.setProperty('--eco-accent',s.accent);
+    document.documentElement.style.setProperty('--eco-bg',s.bg);
+    var wp=document.querySelector('#bg-wave path');if(wp)wp.setAttribute('fill',s.color);
+    document.getElementById('game-title').textContent=s.title;
+    document.getElementById('stage-text').textContent='مرحله '+(ci+1)+' از ۱۲';
+    setWeather(s.weather);
+    renderStage('drop-zone','items-vault',s);
+    resetTimer();
+    if(ci>0)showProfessor();
+}
+
+function renderStage(dzId,vId,s){
+    var dz=document.getElementById(dzId);dz.innerHTML='';
+    var lbs=['🥇 تولیدکننده','🥈 مصرف‌کننده ۱','🥉 مصرف‌کننده ۲','🏅 مصرف‌کننده ۳','🏅 مصرف‌کننده ۴','🏅 مصرف‌کننده ۵','🏅 مصرف‌کننده ۶','🏅 مصرف‌کننده ۷','🏅 مصرف‌کننده ۸'];
+    s.correct.forEach(function(cn,i){
+        var sl=document.createElement('div');sl.className='slot';sl.dataset.index=i;sl.dataset.label=lbs[i]||('مصرف‌کننده '+i);sl.dataset.correctAnswer=cn;
+        sl.setAttribute('aria-label','جایگاه '+(i+1)+': '+(lbs[i]||''));
+        sl.ondragover=function(e){e.preventDefault();sl.classList.add('drag-over')};
+        sl.ondragleave=function(){sl.classList.remove('drag-over')};
+        sl.ondrop=function(e){e.preventDefault();sl.classList.remove('drag-over');if(!dragSource||sl.classList.contains('filled'))return;var it=s.pool.find(function(p){return p.n===dragSource.dataset.name});if(it)fillSlot(sl,it);dragSource=null};
+        sl.onclick=function(){if(selectedOrganism&&!sl.classList.contains('filled')&&!isTouchDragging){var it=s.pool.find(function(p){return p.n===selectedOrganism.dataset.name});if(it)fillSlot(sl,it);clearSel()}else if(sl.classList.contains('filled')){clearSlot(sl);clearSel()}};
+        dz.appendChild(sl);if(i<s.correct.length-1){var ar=document.createElement('span');ar.className='arrow';ar.textContent='➡️';ar.setAttribute('aria-hidden','true');dz.appendChild(ar)}
+    });
+    var v=document.getElementById(vId);v.innerHTML='';
+    var shuffled=s.pool.slice().sort(function(){return Math.random()-.5});
+    shuffled.forEach(function(item){
+        var org=document.createElement('div');org.className='organism';org.draggable=true;org.dataset.name=item.n;
+        org.setAttribute('aria-label',item.n+' '+item.e);
+        org.innerHTML='<span class="emoji">'+item.e+'</span><span class="name">'+sanitize(item.n)+'</span>';
+        org.ondragstart=function(e){dragSource=org;org.classList.add('selected');clearSel();selectedOrganism=null};
+        org.ondragend=function(){org.classList.remove('selected')};
+        setupTouch(org);
+        org.onclick=function(){if(org.classList.contains('used'))return;if(isTouchDragging){isTouchDragging=false;return}document.querySelectorAll('.organism').forEach(function(o){o.classList.remove('selected')});org.classList.add('selected');selectedOrganism=org;dragSource=null;try{AudioSystem.playClick()}catch(e){}};
+        v.appendChild(org);
+    });
+}
+
+function fillSlot(sl,item){try{AudioSystem.playClick()}catch(e){}if(sl.classList.contains('filled'))releaseOrg(sl.dataset.content);document.querySelectorAll('.slot').forEach(function(s){if(s!==sl&&s.dataset.content===item.n)clearSlot(s)});sl.innerHTML='<span class="emoji">'+item.e+'</span><span class="name">'+sanitize(item.n)+'</span>';sl.dataset.content=item.n;sl.classList.add('filled');updateUsed();sl.style.transform='scale(1.08)';setTimeout(function(){sl.style.transform=''},200)}
+function clearSlot(sl){if(sl.classList.contains('filled')){releaseOrg(sl.dataset.content);sl.classList.remove('filled');sl.innerHTML='';delete sl.dataset.content;try{AudioSystem.playClick()}catch(e){}}}
+function releaseOrg(n){document.querySelectorAll('.organism').forEach(function(o){if(o.dataset.name===n)o.classList.remove('used')})}
+function updateUsed(){var un=new Set();document.querySelectorAll('.slot').forEach(function(s){if(s.dataset.content)un.add(s.dataset.content)});document.querySelectorAll('.organism').forEach(function(o){o.classList.toggle('used',un.has(o.dataset.name))})}
+function clearSel(){selectedOrganism=null;document.querySelectorAll('.organism').forEach(function(o){o.classList.remove('selected')})}
+
+function useHint(){
+    if(!gameActive)return;
+    var mh=parseInt(localStorage.getItem('tcHints')||'3');
+    if(hintCount>=mh){toast('⚠️ فقط '+mh+' بار راهنمایی!','warning');return}
+    var es=Array.from(document.querySelectorAll('#drop-zone .slot')).filter(function(s){return!s.classList.contains('filled')});
+    if(!es.length){toast('همه جا پر شده!','info');return}
+    hintCount++;score=Math.max(0,score-15);document.getElementById('score-value').textContent=score;
+    try{AudioSystem.playHint()}catch(e){}
+    document.querySelectorAll('.slot').forEach(function(s){s.classList.remove('hint-highlight')});
+    var rs=es[Math.floor(Math.random()*es.length)];
+    rs.classList.add('hint-highlight');
+    rs.setAttribute('aria-label','راهنمایی: این جایگاه رو پر کن');
+    setTimeout(function(){rs.classList.remove('hint-highlight');rs.removeAttribute('aria-label')},2500);
+    toast('💡 به جایگاه طلایی دقت کن! موجود درست رو پیدا کن و بکش توش.','info',3000);
+    clearSel();
+}
+
+function checkAnswer(){
+    if(!gameActive)return;
+    var s=stages[ci],sls=document.querySelectorAll('#drop-zone .slot'),uo=Array.from(sls).map(function(s){return s.dataset.content});
+    if(uo.indexOf(undefined)>=0||uo.indexOf('')>=0){try{AudioSystem.playWrong()}catch(e){}toast('⚠️ همه جا رو پر کن!','warning');return}
+    var cc=0,firstWrong=-1;
+    sls.forEach(function(sl,i){
+        if(uo[i]===s.correct[i]){cc++;sl.style.borderColor='#10b981';sl.style.background='rgba(209,250,229,.8)'}
+        else{sl.style.borderColor='#ef4444';sl.style.background='rgba(254,226,226,.8)';recordError(ci,i);if(firstWrong<0)firstWrong=i}
+        setTimeout(function(){sl.style.borderColor='';sl.style.background=''},1200);
+    });
+    if(cc===s.correct.length)handleComplete();
+    else{
+        try{AudioSystem.playWrong()}catch(e){}
+        combo=0;document.getElementById('combo-display').style.display='none';
+        toast('❌ '+cc+' از '+s.correct.length+' درسته. دقت کن!','error');
+        if(firstWrong>=0&&!firstErrorThisStage){
+            firstErrorThisStage=true;
+            showErrorFeedback(firstWrong,s);
+        }
+    }
+}
+
+function handleComplete(){
+    if(stageCompleted)return;
+    stageCompleted=true;gameActive=false;clearInterval(timerInterval);
+    try{AudioSystem.playWin()}catch(e){}
+    spawnEnergyArrows();combo++;
+    var s=stages[ci],tb=selectedDifficulty!=='easy'?Math.floor(timeLeft*(selectedDifficulty==='hard'?5:3)):0;
+    var ss=s.base+tb+(combo>1?combo*30:0);score+=ss;addXP(ss);
+    document.getElementById('score-value').textContent=score;animateScore(ss);
+    if(combo>1){document.getElementById('combo-display').style.display='flex';document.getElementById('combo-value').textContent=combo;try{AudioSystem.playCombo()}catch(e){}if(combo===2)toast('🔥 دو مرحله پشت سر هم!','success',3000);else toast('🔥 زنجیره ×'+combo+'!','success',3000)}
+    checkBadges();
+    if(!document.body.classList.contains('focus-mode')){
+        confetti(window.innerWidth/2,window.innerHeight/2,60);
+        starBurst(window.innerWidth/2,window.innerHeight/2,10);
+    }
+    ci++;saveProgress();
+    setTimeout(function(){
+        if(ci<stages.length){
+            if(localStorage.getItem('tcKnowledge')!=='false'){
+                showScienceFact(function(){
+                    var nextStage=stages[ci];
+                    showEcosystemStory(nextStage,function(){
+                        stageCompleted=false;gameActive=true;loadStage();
+                    });
+                });
+            }else{
+                var nextStage=stages[ci];
+                showEcosystemStory(nextStage,function(){
+                    stageCompleted=false;gameActive=true;loadStage();
+                });
+            }
+        }else{finishGame()}
+    },1800);
+}
+
+function resetTimer(){
+    clearInterval(timerInterval);
+    var te=localStorage.getItem('tcTimer')!=='false',tc=document.getElementById('timer-container'),tv=document.getElementById('timer-value');
+    if(selectedDifficulty==='easy'||!te){tv.textContent='∞';tc.classList.add('timer-hidden');return}
+    tc.classList.remove('timer-hidden','timer-warning');timeLeft=stages[ci].time[selectedDifficulty]||45;
+    tv.textContent=timeLeft+' ثانیه';
+    timerInterval=setInterval(function(){timeLeft--;tv.textContent=timeLeft+' ثانیه';if(timeLeft<=8)tc.classList.add('timer-warning');if(timeLeft<=0){clearInterval(timerInterval);try{AudioSystem.playWrong()}catch(e){}toast('⏰ زمان تموم شد!','error');resetStage()}},1000);
+}
+
+function finishGame(){
+    gameActive=false;clearInterval(timerInterval);
+    try{AudioSystem.stopMusic();AudioSystem.playWin()}catch(e){}
+    stopWeather();clearProgress();if(studentName)saveGrade(studentName,score,selectedDifficulty);
+    var cd=document.getElementById('score-comparison');
+    if(prevBest>0){cd.style.display='block';if(score>prevBest)cd.innerHTML='<span style="color:#10b981;font-weight:900">🎉 نمره‌ات بهتر شد!</span><br>'+prevBest+' → '+score+' <span style="color:#10b981">(+'+(score-prevBest)+')</span>';else cd.innerHTML='<span style="color:#64748b">📊 نمره: '+score+'<br>بهترین: '+prevBest+'</span>'}
+    document.getElementById('final-message').textContent='⭐ '+studentName+' عزیز، امتیاز: '+score+'\n🌿 ۱۲ اکوسیستم کامل شد!'+(score>prevBest?'\n🏆 بهترین نمره‌ات بهتر شد!':'');
+    document.getElementById('high-score-badge').style.display='flex';document.getElementById('high-score-value').textContent=Math.max(score,prevBest);
+    checkBadges();
+    if(score>prevBest&&!document.body.classList.contains('focus-mode')){confetti(window.innerWidth/2,window.innerHeight/2,120);starBurst(window.innerWidth/2,window.innerHeight/2,20)}
+    document.getElementById('finish-modal').style.display='flex';
+}
+
+function resetStage(){clearInterval(timerInterval);document.querySelectorAll('#drop-zone .slot').forEach(function(s){if(s.classList.contains('filled'))clearSlot(s)});clearSel();rmClone();hintCount=0;firstErrorThisStage=false;stageCompleted=false;resetTimer()}
+
+function goHome(){
+    clearInterval(timerInterval);gameActive=false;rmClone();preOk=false;
+    try{AudioSystem.stopMusic()}catch(e){}stopWeather();clearProgress();
+    document.getElementById('game-screen').style.display='none';document.getElementById('duel-screen').style.display='none';document.getElementById('finish-modal').style.display='none';
+    var sf=document.getElementById('science-fact-overlay');if(sf)sf.remove();
+    var bp=document.querySelector('.badge-popup');if(bp)bp.remove();
+    var pp=document.querySelector('.professor-popup');if(pp)pp.remove();
+    var so=document.querySelector('.story-overlay');if(so)so.remove();
+    document.getElementById('difficulty-screen').style.display='block';
+    document.body.style.background='linear-gradient(135deg,#e8f5e9,#e3f2fd)';
+    document.documentElement.style.setProperty('--eco-color','#6c5ce7');
+    if(studentName)checkPrev(studentName);
+    document.getElementById('score-value').textContent='0';combo=0;ci=0;score=0;duelActive=false;updateXPBar();
+}
+
+var duelActive=false;
+var duelData={p1:{name:'',score:0,combo:0,si:0,done:false,ft:0,st:0,ti:null,tl:0,sc:false,hc:0,so:null,ds:null,tc:null,itd:false,order:[]},p2:{name:'',score:0,combo:0,si:0,done:false,ft:0,st:0,ti:null,tl:0,sc:false,hc:0,so:null,ds:null,tc:null,itd:false,order:[]},diff:'normal',winner:null};
+
+function shuffleArray(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=a[i];a[i]=a[j];a[j]=tmp}return a}
+
+function showDuelSetup(){document.getElementById('duel-setup-modal').style.display='flex';document.getElementById('duel-error').style.display='none';try{AudioSystem.playClick()}catch(e){}}
+function startDuel(diff){
+    var n1=document.getElementById('duel-p1-name').value.trim(),n2=document.getElementById('duel-p2-name').value.trim();
+    var err1=validateName(n1),err2=validateName(n2);
+    if(err1||err2){document.getElementById('duel-error').textContent='⚠️ '+(err1||err2);document.getElementById('duel-error').style.display='block';return}
+    if(n1===n2){document.getElementById('duel-error').textContent='⚠️ اسم‌ها یکسان نباشن!';document.getElementById('duel-error').style.display='block';return}
+    document.getElementById('duel-error').style.display='none';document.getElementById('duel-setup-modal').style.display='none';
+    var stageIndices=Array.from({length:stages.length},function(_,i){return i});
+    var order1=shuffleArray(stageIndices);
+    var order2=shuffleArray(stageIndices);
+    duelData.p1={name:sanitize(n1),score:0,combo:0,si:0,done:false,ft:0,st:Date.now(),ti:null,tl:0,sc:false,hc:0,so:null,ds:null,tc:null,itd:false,order:order1};
+    duelData.p2={name:sanitize(n2),score:0,combo:0,si:0,done:false,ft:0,st:Date.now(),ti:null,tl:0,sc:false,hc:0,so:null,ds:null,tc:null,itd:false,order:order2};
+    duelData.diff=diff;duelActive=true;
+    document.getElementById('name-entry-screen').style.display='none';document.getElementById('difficulty-screen').style.display='none';
+    document.getElementById('game-screen').style.display='none';document.getElementById('duel-screen').style.display='block';
+    document.getElementById('duel-player1-header').textContent='🔵 '+duelData.p1.name;
+    document.getElementById('duel-player2-header').textContent='🔴 '+duelData.p2.name;
+    document.getElementById('duel-winner-banner').style.display='none';
+    document.getElementById('duel-p1-finished').style.display='none';document.getElementById('duel-p2-finished').style.display='none';
+    document.getElementById('duel-p1-score').textContent='0';document.getElementById('duel-p2-score').textContent='0';
+    document.getElementById('duel-p1-stage').textContent='۱/۱۲';document.getElementById('duel-p2-stage').textContent='۱/۱۲';
+    try{AudioSystem.playDuelStart()}catch(e){}
+    toast('⚔️ '+duelData.p1.name+' VS '+duelData.p2.name+' - ترتیب مراحل تصادفیه!','info',4000);
+    duelLoad(1);duelLoad(2);
+}
+
+function duelLoad(pn){
+    if(!duelActive)return;
+    var pd=pn===1?duelData.p1:duelData.p2;
+    if(pd.done||pd.si>=stages.length)return;
+    var actualStageIndex=pd.order[pd.si];
+    var s=stages[actualStageIndex];pd.sc=false;pd.hc=0;
+    document.getElementById('duel-p'+pn+'-stage').textContent=(pd.si+1)+'/'+stages.length;
+    document.getElementById('duel-p'+pn+'-score').textContent=pd.score;
+    var dzId='duel-p'+pn+'-drop-zone',vId='duel-p'+pn+'-items-vault';
+    var dz=document.getElementById(dzId);dz.innerHTML='';
+    var lbs=['🥇 تولیدکننده','🥈 مصرف‌کننده ۱','🥉 مصرف‌کننده ۲','🏅 مصرف‌کننده ۳','🏅 مصرف‌کننده ۴','🏅 مصرف‌کننده ۵','🏅 مصرف‌کننده ۶','🏅 مصرف‌کننده ۷','🏅 مصرف‌کننده ۸'];
+    s.correct.forEach(function(cn,i){
+        var sl=document.createElement('div');sl.className='slot';sl.dataset.index=i;sl.dataset.label=lbs[i]||'🏅';sl.dataset.correctAnswer=cn;
+        sl.setAttribute('aria-label','جایگاه '+(i+1));
+        sl.ondragover=function(e){e.preventDefault();sl.classList.add('drag-over')};
+        sl.ondragleave=function(){sl.classList.remove('drag-over')};
+        sl.ondrop=function(e){e.preventDefault();sl.classList.remove('drag-over');if(!pd.ds||sl.classList.contains('filled'))return;var it=s.pool.find(function(p){return p.n===pd.ds.dataset.name});if(it)duelFill(pn,sl,it);pd.ds=null};
+        sl.onclick=function(){if(pd.so&&!sl.classList.contains('filled')&&!pd.itd){var it=s.pool.find(function(p){return p.n===pd.so.dataset.name});if(it)duelFill(pn,sl,it);duelClearSel(pn)}else if(sl.classList.contains('filled')){duelClearSlot(pn,sl);duelClearSel(pn)}};
+        dz.appendChild(sl);if(i<s.correct.length-1){var ar=document.createElement('span');ar.className='arrow';ar.textContent='➡️';ar.setAttribute('aria-hidden','true');dz.appendChild(ar)}
+    });
+    var v=document.getElementById(vId);v.innerHTML='';
+    var shuffled=s.pool.slice().sort(function(){return Math.random()-.5});
+    shuffled.forEach(function(item){
+        var org=document.createElement('div');org.className='organism';org.draggable=true;org.dataset.name=item.n;
+        org.setAttribute('aria-label',item.n);
+        org.innerHTML='<span class="emoji">'+item.e+'</span><span class="name">'+sanitize(item.n)+'</span>';
+        org.ondragstart=function(e){pd.ds=org;org.classList.add('selected');duelClearSel(pn);pd.so=null};
+        org.ondragend=function(){org.classList.remove('selected')};
+        org.addEventListener('touchstart',function(e){if(this.classList.contains('used'))return;e.preventDefault();pd.itd=false;pd.ds=this;pd.so=this;this.classList.add('selected')},{passive:false});
+        org.addEventListener('touchmove',function(e){if(!pd.ds||pd.ds!==this)return;e.preventDefault();if(!pd.itd){pd.itd=true;pd.tc=mkClone(this);try{AudioSystem.playClick()}catch(e){}}if(pd.itd&&pd.tc){pd.tc.style.left=e.touches[0].clientX+'px';pd.tc.style.top=e.touches[0].clientY+'px'}},{passive:false});
+        org.addEventListener('touchend',function(e){if(!pd.ds||pd.ds!==this)return;e.preventDefault();if(pd.itd&&pd.tc){var eb=document.elementFromPoint(e.changedTouches[0].clientX,e.changedTouches[0].clientY);if(eb){var sl=eb.closest('.slot');if(sl&&!sl.classList.contains('filled')){var it=s.pool.find(function(p){return p.n===this.dataset.name}.bind(this));if(it)duelFill(pn,sl,it)}}}if(pd.tc){pd.tc.remove();pd.tc=null}this.classList.remove('selected');pd.ds=null;pd.so=null;pd.itd=false},{passive:false});
+        org.onclick=function(){if(org.classList.contains('used'))return;if(pd.itd){pd.itd=false;return}document.querySelectorAll('#'+vId+' .organism').forEach(function(o){o.classList.remove('selected')});org.classList.add('selected');pd.so=org;pd.ds=null;try{AudioSystem.playClick()}catch(e){}};
+        v.appendChild(org);
+    });
+    duelResetTimer(pn);
+}
+
+function duelFill(pn,sl,item){try{AudioSystem.playClick()}catch(e){}var pd=pn===1?duelData.p1:duelData.p2,vId='duel-p'+pn+'-items-vault',dzId='duel-p'+pn+'-drop-zone';if(sl.classList.contains('filled')){document.querySelectorAll('#'+vId+' .organism').forEach(function(o){if(o.dataset.name===sl.dataset.content)o.classList.remove('used')})}document.querySelectorAll('#'+dzId+' .slot').forEach(function(s){if(s!==sl&&s.dataset.content===item.n)duelClearSlot(pn,s)});sl.innerHTML='<span class="emoji">'+item.e+'</span><span class="name">'+sanitize(item.n)+'</span>';sl.dataset.content=item.n;sl.classList.add('filled');var un=new Set();document.querySelectorAll('#'+dzId+' .slot').forEach(function(s){if(s.dataset.content)un.add(s.dataset.content)});document.querySelectorAll('#'+vId+' .organism').forEach(function(o){o.classList.toggle('used',un.has(o.dataset.name))});sl.style.transform='scale(1.08)';setTimeout(function(){sl.style.transform=''},200)}
+function duelClearSlot(pn,sl){if(sl.classList.contains('filled')){var vId='duel-p'+pn+'-items-vault';document.querySelectorAll('#'+vId+' .organism').forEach(function(o){if(o.dataset.name===sl.dataset.content)o.classList.remove('used')});sl.classList.remove('filled');sl.innerHTML='';delete sl.dataset.content;try{AudioSystem.playClick()}catch(e){}}}
+function duelClearSel(pn){var pd=pn===1?duelData.p1:duelData.p2;pd.so=null;document.querySelectorAll('#duel-p'+pn+'-items-vault .organism').forEach(function(o){o.classList.remove('selected')})}
+function duelHint(pn){if(!duelActive)return;var pd=pn===1?duelData.p1:duelData.p2;if(pd.done)return;var mh=parseInt(localStorage.getItem('tcHints')||'3');if(pd.hc>=mh){toast('⚠️ فقط '+mh+' بار','warning');return}var es=Array.from(document.querySelectorAll('#duel-p'+pn+'-drop-zone .slot')).filter(function(s){return!s.classList.contains('filled')});if(!es.length)return;pd.hc++;pd.score=Math.max(0,pd.score-15);document.getElementById('duel-p'+pn+'-score').textContent=pd.score;try{AudioSystem.playHint()}catch(e){}document.querySelectorAll('#duel-p'+pn+'-drop-zone .slot').forEach(function(s){s.classList.remove('hint-highlight')});var rs=es[Math.floor(Math.random()*es.length)];rs.classList.add('hint-highlight');setTimeout(function(){rs.classList.remove('hint-highlight')},2500);duelClearSel(pn)}
+function duelCheck(pn){if(!duelActive)return;var pd=pn===1?duelData.p1:duelData.p2;if(pd.done)return;var actualStageIndex=pd.order[pd.si];var s=stages[actualStageIndex],sls=document.querySelectorAll('#duel-p'+pn+'-drop-zone .slot'),uo=Array.from(sls).map(function(s){return s.dataset.content});if(uo.indexOf(undefined)>=0||uo.indexOf('')>=0){try{AudioSystem.playWrong()}catch(e){}return}var cc=0;sls.forEach(function(sl,i){if(uo[i]===s.correct[i]){cc++;sl.style.borderColor='#10b981'}else{sl.style.borderColor='#ef4444'}setTimeout(function(){sl.style.borderColor=''},800)});if(cc===s.correct.length)duelComplete(pn);else{try{AudioSystem.playWrong()}catch(e){}pd.combo=0}}
+function duelComplete(pn){var pd=pn===1?duelData.p1:duelData.p2;if(pd.sc)return;pd.sc=true;clearInterval(pd.ti);pd.combo++;var actualStageIndex=pd.order[pd.si];var s=stages[actualStageIndex],tb=duelData.diff!=='easy'?Math.floor(pd.tl*(duelData.diff==='hard'?5:3)):0,ss=s.base+tb+(pd.combo>1?pd.combo*30:0);pd.score+=ss;document.getElementById('duel-p'+pn+'-score').textContent=pd.score;pd.si++;if(pd.si>=stages.length){pd.done=true;pd.ft=(Date.now()-pd.st)/1000;document.getElementById('duel-p'+pn+'-finished').style.display='flex';document.getElementById('duel-p'+pn+'-finish-time').textContent=pd.ft.toFixed(1);document.getElementById('duel-p'+pn+'-finish-score').textContent=pd.score;checkDuelWinner()}else setTimeout(function(){pd.sc=false;duelLoad(pn)},1500)}
+function duelResetTimer(pn){var pd=pn===1?duelData.p1:duelData.p2;clearInterval(pd.ti);var te=localStorage.getItem('tcTimer')!=='false',tc=document.getElementById('duel-p'+pn+'-timer-container'),tv=document.getElementById('duel-p'+pn+'-timer');if(duelData.diff==='easy'||!te){tv.textContent='∞';if(tc)tc.classList.add('timer-hidden');return}if(tc)tc.classList.remove('timer-hidden','timer-warning');pd.tl=stages[pd.order[pd.si]].time[duelData.diff]||45;tv.textContent=pd.tl+' ثانیه';pd.ti=setInterval(function(){pd.tl--;tv.textContent=pd.tl+' ثانیه';if(pd.tl<=8&&tc)tc.classList.add('timer-warning');if(pd.tl<=0){clearInterval(pd.ti);duelResetStage(pn)}},1000)}
+function duelResetStage(pn){var pd=pn===1?duelData.p1:duelData.p2;clearInterval(pd.ti);document.querySelectorAll('#duel-p'+pn+'-drop-zone .slot').forEach(function(s){if(s.classList.contains('filled'))duelClearSlot(pn,s)});duelClearSel(pn);if(pd.tc){pd.tc.remove();pd.tc=null}pd.hc=0;pd.sc=false;duelResetTimer(pn)}
+function duelReset(pn){duelResetStage(pn)}
+function checkDuelWinner(){if(!duelActive)return;if(duelData.p1.done&&duelData.p2.done)declareDuel();else if(duelData.p1.done||duelData.p2.done){var fp=duelData.p1.done?1:2,wp=fp===1?2:1;toast('⏳ '+duelData['p'+fp].name+' تموم کرد! ۳۰ ثانیه برای '+duelData['p'+wp].name+'...','warning',5000);setTimeout(function(){if(!duelData['p'+wp].done){duelData['p'+wp].done=true;duelData['p'+wp].ft=(Date.now()-duelData['p'+wp].st)/1000;document.getElementById('duel-p'+wp+'-finished').style.display='flex';document.getElementById('duel-p'+wp+'-finish-time').textContent=duelData['p'+wp].ft.toFixed(1);document.getElementById('duel-p'+wp+'-finish-score').textContent=duelData['p'+wp].score;clearInterval(duelData['p'+wp].ti)}declareDuel()},30000)}}
+function declareDuel(){duelActive=false;var p1=duelData.p1,p2=duelData.p2;try{AudioSystem.stopMusic()}catch(e){}var wn=null;if(p1.score>p2.score)wn=1;else if(p2.score>p1.score)wn=2;else{if(p1.ft<p2.ft)wn=1;else if(p2.ft<p1.ft)wn=2}if(wn){duelData.winner=wn;document.getElementById('duel-player'+wn+'-panel').classList.add('winner');document.getElementById('duel-winner-banner').textContent='🏆 '+duelData['p'+wn].name+' برنده شد! 🏆';document.getElementById('duel-winner-banner').style.display='block';try{AudioSystem.playDuelWin()}catch(e){}if(!document.body.classList.contains('focus-mode'))confetti(window.innerWidth/2,window.innerHeight/3,150);saveGrade(duelData['p'+wn].name,duelData['p'+wn].score,duelData.diff)}else{document.getElementById('duel-winner-banner').textContent='🤝 مساوی!';document.getElementById('duel-winner-banner').style.display='block'}}
+function endDuel(){duelActive=false;clearInterval(duelData.p1.ti);clearInterval(duelData.p2.ti);try{AudioSystem.stopMusic()}catch(e){}document.getElementById('duel-screen').style.display='none';document.getElementById('name-entry-screen').style.display='block';document.body.style.background='linear-gradient(135deg,#e8f5e9,#e3f2fd)'}
+function showLeaderboard(){showGrades()}
+
+document.querySelectorAll('.modal').forEach(function(m){m.addEventListener('click',function(e){if(e.target===this)this.style.display='none'})});
+document.addEventListener('DOMContentLoaded',function(){
+    createStars('welcome-stars');
+    createStars('rules-stars');
+    createParticles();
+    var sn=localStorage.getItem('lastName');
+    if(sn){
+        var nameInput=document.getElementById('student-name-input');
+        if(nameInput){nameInput.value=sn;checkPrev(sn)}
+    }
+    if(localStorage.getItem('focusMode')==='true'){
+        document.body.classList.add('focus-mode');
+    }
+});
+console.log('Game ready! v3 - All features optimized');
+</script>
+</body>
+</html>
